@@ -6,10 +6,13 @@ int	pipex(char **argv)
 	return (0);
 }
 
-int	main(int argc, char **argv)
+int	main(int argc, char **argv, char **envp)
 {
 	int	i;
 
+	i = -1;
+	while (envp[++i])
+		printf("envp%d -> %s\n", i, envp[i]);
 	i = 1;
 	printf("argc == %d\n", argc);
 	printf("Inputs are\n");
