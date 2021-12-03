@@ -10,6 +10,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	int	i;
 
+	/*
 	i = -1;
 	while (envp[++i])
 		printf("envp%d -> %s\n", i, envp[i]);
@@ -21,7 +22,7 @@ int	main(int argc, char **argv, char **envp)
 		printf("%s ", argv[i++]);
 	}
 	printf("\n");
-	/*
+	*/
 	if (argc == 5)
 	{
 		printf("argc == %d\n", argc);
@@ -32,7 +33,6 @@ int	main(int argc, char **argv, char **envp)
 		printf("argc == %d\n", argc);
 		printf("The number of inputs is wrong!\n");
 	}
-	*/
 	return (0);
 }
 
