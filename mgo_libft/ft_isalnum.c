@@ -1,24 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_isalnum.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgo <mgo@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/04 11:50:06 by mgo               #+#    #+#             */
-/*   Updated: 2021/12/04 11:50:08 by mgo              ###   ########.fr       */
+/*   Created: 2021/05/09 11:54:20 by mgo               #+#    #+#             */
+/*   Updated: 2021/05/14 10:35:56 by mgo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include "mgo_libft/libft.h"
+#include "libft.h"
 
-typedef struct  s_pipex
+int	ft_isalnum(int c)
 {
-    char    *infile;
-    char    *outfile;
-    char    **path;
-    char    ***command;
-}               t_pipex;
+	if (ft_isalpha(c) || ft_isdigit(c))
+		return (1);
+	else
+		return (0);
+}

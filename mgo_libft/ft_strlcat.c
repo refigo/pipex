@@ -1,24 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgo <mgo@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/04 11:50:06 by mgo               #+#    #+#             */
-/*   Updated: 2021/12/04 11:50:08 by mgo              ###   ########.fr       */
+/*   Created: 2021/05/10 17:37:29 by mgo               #+#    #+#             */
+/*   Updated: 2021/05/14 13:50:15 by mgo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include "mgo_libft/libft.h"
+#include "libft.h"
 
-typedef struct  s_pipex
+size_t	ft_strlcat(char *dest, const char *src, size_t destsize)
 {
-    char    *infile;
-    char    *outfile;
-    char    **path;
-    char    ***command;
-}               t_pipex;
+	size_t	i;
+
+	i = 0;
+	while ((i < destsize) && (*dest != '\0'))
+	{
+		dest++;
+		i++;
+	}
+	while ((i + 1 < destsize) && (*src != '\0'))
+	{
+		*(dest++) = *(src++);
+		i++;
+	}
+	if (i < destsize)
+		*dest = '\0';
+	while (*src != '\0')
+	{
+		src++;
+		i++;
+	}
+	return (i);
+}

@@ -1,24 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_lstclear.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgo <mgo@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/04 11:50:06 by mgo               #+#    #+#             */
-/*   Updated: 2021/12/04 11:50:08 by mgo              ###   ########.fr       */
+/*   Created: 2021/05/16 12:21:33 by mgo               #+#    #+#             */
+/*   Updated: 2021/05/16 14:10:15 by mgo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include "mgo_libft/libft.h"
+#include "libft.h"
 
-typedef struct  s_pipex
+void	ft_lstclear(t_list **lst, void (*del)(void *))
 {
-    char    *infile;
-    char    *outfile;
-    char    **path;
-    char    ***command;
-}               t_pipex;
+	t_list	*tmp;
+
+	while (*lst)
+	{
+		tmp = (*lst)->next;
+		ft_lstdelone(*lst, del);
+		*lst = tmp;
+	}
+}

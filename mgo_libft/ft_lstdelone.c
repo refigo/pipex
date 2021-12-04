@@ -1,24 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_lstdelone.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgo <mgo@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/04 11:50:06 by mgo               #+#    #+#             */
-/*   Updated: 2021/12/04 11:50:08 by mgo              ###   ########.fr       */
+/*   Created: 2021/05/16 12:18:48 by mgo               #+#    #+#             */
+/*   Updated: 2021/05/16 12:21:11 by mgo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include "mgo_libft/libft.h"
+#include "libft.h"
 
-typedef struct  s_pipex
+void	ft_lstdelone(t_list *lst, void (*del)(void *))
 {
-    char    *infile;
-    char    *outfile;
-    char    **path;
-    char    ***command;
-}               t_pipex;
+	del(lst->content);
+	free(lst);
+}

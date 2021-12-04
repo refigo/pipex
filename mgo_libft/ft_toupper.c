@@ -1,24 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_toupper.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgo <mgo@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/04 11:50:06 by mgo               #+#    #+#             */
-/*   Updated: 2021/12/04 11:50:08 by mgo              ###   ########.fr       */
+/*   Created: 2021/05/09 12:15:07 by mgo               #+#    #+#             */
+/*   Updated: 2021/05/09 12:23:12 by mgo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include "mgo_libft/libft.h"
+#include "libft.h"
 
-typedef struct  s_pipex
+int	ft_toupper(int c)
 {
-    char    *infile;
-    char    *outfile;
-    char    **path;
-    char    ***command;
-}               t_pipex;
+	if (('a' <= c) && (c <= 'z'))
+		return (c - 32);
+	else
+		return (c);
+}

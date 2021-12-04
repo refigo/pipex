@@ -1,24 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgo <mgo@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/04 11:50:06 by mgo               #+#    #+#             */
-/*   Updated: 2021/12/04 11:50:08 by mgo              ###   ########.fr       */
+/*   Created: 2021/05/11 12:03:11 by mgo               #+#    #+#             */
+/*   Updated: 2021/05/14 15:56:25 by mgo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include "mgo_libft/libft.h"
+#include "libft.h"
 
-typedef struct  s_pipex
+char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 {
-    char    *infile;
-    char    *outfile;
-    char    **path;
-    char    ***command;
-}               t_pipex;
+	size_t	needle_len;
+
+	needle_len = ft_strlen(needle);
+	if (!needle_len)
+		return ((char *)haystack);
+	while ((*haystack) && len && ((len - needle_len + 1) > 0))
+	{
+		if (*haystack == *needle)
+			if (!(ft_memcmp(haystack, needle, needle_len)))
+				return ((char *)haystack);
+		haystack++;
+		len--;
+	}
+	return (NULL);
+}
