@@ -13,7 +13,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "mgo_libft/libft.h"
+#include "libft.h"
 
 typedef struct  s_pipex
 {
@@ -23,3 +23,32 @@ typedef struct  s_pipex
     char    **path;
     char    **file;
 }               t_pipex;
+
+
+
+
+
+/*
+** =============================================================================
+** etc
+** =============================================================================
+*/
+
+void	exit_free_data(t_pipex *data);
+
+/*
+** =============================================================================
+** set_data.c
+** =============================================================================
+*/
+
+int	set_data(t_pipex **data, char **argv, char **envp);
+
+/*
+** =============================================================================
+** test.c
+** =============================================================================
+*/
+int	test_anything(char **envp);
+int	test_command_array(char ***command);
+int	test_data(t_pipex *data);
