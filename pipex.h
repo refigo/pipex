@@ -19,6 +19,6 @@ typedef struct  s_pipex
 {
     char    *infile;
     char    *outfile;
-    char    **path;
     char    ***command;
+    char    **path;
 }               t_pipex;

@@ -14,24 +14,74 @@
 
 /*
 ** =============================================================================
-** set_data.c
+** etc
 ** =============================================================================
 */
+
+void	exit_free_data(t_pipex *data)
+{
+	// TODO : free data's pointer properly
+	exit(1);
+}
+
+/*
+** =============================================================================
+** test
+** =============================================================================
+*/
+
+int	test_anything(char **envp)
+{
+	char *str_array[3] = {"ls", "-l", NULL};
+	int	status;
+
+	status = access("/bin/ls", X_OK);
+	printf("access status : %d\n", status);
+	execve("/bin/ls", str_array, envp);
+	return (0);
+}
+
+int	test_command_array(char ***command)
+{
+	int	i;
+	int	j;
+
+	i = -1;
+	while (command[++i])
+	{
+		j = -1;
+		printf("command %d : ", i + 1);
+		while (command[i][++j])
+		{
+			printf("[%s]", command[i][j]);
+		}
+		printf("\n");
+	}
+	return (0);
+}
 
 int	test_data(t_pipex *data)
 {
 	int	i;
 
 	i = -1;
-	printf("infile == %s", data->infile);
-	printf("outfile == %s", data->outfile);
-	printf("path == [\n");
+	printf("===== test data =====\n");
+	printf("infile : [%s]\n", data->infile);
+	printf("outfile : [%s]\n", data->outfile);
+	printf("<command>\n");
+	test_command_array(data->command);
+	printf("<path>\n");
 	while (data->path[++i])
-		printf("%s\n", data->path[i]);
-	printf("]\n");
-	printf("command == ");
+		printf("[%s]", data->path[i]);
+	printf("\n===== complete test data =====\n");
 	return (0);
 }
+
+/*
+** =============================================================================
+** set_data.c
+** =============================================================================
+*/
 
 int	get_path(t_pipex **data, char **envp)
 {
@@ -51,7 +101,17 @@ int	get_path(t_pipex **data, char **envp)
 
 int	set_command(t_pipex **data, char **argv)
 {
-	// TODO : set argv's command
+	// TODO : set argv's command to data
+	char	***command_buf;
+
+	command_buf = (char ***)ft_calloc(3, sizeof(char **));
+	// todo : exception
+	command_buf[0] = ft_split(argv[2], ' ');
+	// todo : exception
+	command_buf[1] = ft_split(argv[3], ' ');
+	// todo : exception
+	(*data)->command = command_buf;
+	return (0);
 }
 
 int	set_data(t_pipex **data, char **argv, char **envp)
@@ -61,8 +121,9 @@ int	set_data(t_pipex **data, char **argv, char **envp)
 		exit_free_data(*data);
 	(*data)->infile = argv[1];
 	(*data)->outfile = argv[4];
-	get_path(data, envp);
 	set_command(data, argv);
+	get_path(data, envp);
+	// set_file();
 
 	// test
 	test_data(*data);
@@ -82,23 +143,6 @@ int	pipex(int argc, char **argv)
 	return (0);
 }
 
-void	exit_free_data(t_pipex *data)
-{
-	// TODO : free data's pointer properly
-	exit(1);
-}
-
-int	test_anything(char **envp)
-{
-	char *str_array[3] = {"ls", "-l", NULL};
-	int	status;
-
-	status = access("/bin/ls", X_OK);
-	printf("status == %d\n", status);
-	execve("/bin/ls", str_array, envp);
-	return (0);
-}
-
 int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	*data;
@@ -111,8 +155,8 @@ int	main(int argc, char **argv, char **envp)
 	}
 	set_data(&data, argv, envp);
 	pipex(argc, argv);
-	free(data);
 	test_anything(envp);
+	// todo : free data or exit_free_data
 	return (0);
 }
 
