@@ -64,16 +64,20 @@ int	test_data(t_pipex *data)
 {
 	int	i;
 
-	i = -1;
 	printf("===== test data =====\n");
 	printf("infile : [%s]\n", data->infile);
 	printf("outfile : [%s]\n", data->outfile);
 	printf("<command>\n");
 	test_command_array(data->command);
 	printf("<path>\n");
+	i = -1;
 	while (data->path[++i])
 		printf("[%s]", data->path[i]);
-	printf("\n===== complete test data =====\n");
+	printf("\n<file>\n");
+	i = -1;
+	while (data->file[++i])
+		printf("[%s]\n", data->file[i]);
+	printf("===== complete test data =====\n");
 	return (0);
 }
 
@@ -82,6 +86,51 @@ int	test_data(t_pipex *data)
 ** set_data.c
 ** =============================================================================
 */
+
+int	set_file(t_pipex **data)
+{
+	char	**file_buf;
+	int	i;
+	int	j;
+
+	file_buf = (char **)ft_calloc(3, sizeof(char *));
+	// todo : exception
+	i = -1;
+	while ((*data)->command[++i])
+	{
+		j = -1;
+		while ((*data)->path[++j])
+		{
+			file_buf[i] = ft_strjoin((*data)->path[j], (*data)->command[i][0]);
+			// todo : exception
+			if (!access(file_buf[i], X_OK))
+				break ;
+			free(file_buf[i]);
+		}
+	}
+	(*data)->file = file_buf;
+	return (0);
+}
+
+int	add_slash_to_path(char **path)
+{
+	char	*buf;
+	int	len_path;
+	int	i;
+
+	i = -1;
+	while (path[++i])
+	{
+		len_path = ft_strlen(path[i]);
+		buf = (char *)ft_calloc(1, len_path + 2);
+		buf = ft_memmove(buf, path[i], len_path);
+		// todo : exception
+		buf[len_path] = '/';
+		free(path[i]);
+		path[i] = buf;
+	}
+	return (0);
+}
 
 int	get_path(t_pipex **data, char **envp)
 {
@@ -93,15 +142,17 @@ int	get_path(t_pipex **data, char **envp)
 		if (ft_strnstr(envp[i], "PATH=", 5))
 			break ;
 	path_buf = ft_split(envp[i] + 5, ':');
+	// todo : exception
 	if (!path_buf)
 		exit_free_data(*data);
+	i = -1;
+	add_slash_to_path(path_buf);
 	(*data)->path = path_buf;
 	return (1);
 }
 
 int	set_command(t_pipex **data, char **argv)
 {
-	// TODO : set argv's command to data
 	char	***command_buf;
 
 	command_buf = (char ***)ft_calloc(3, sizeof(char **));
@@ -123,7 +174,7 @@ int	set_data(t_pipex **data, char **argv, char **envp)
 	(*data)->outfile = argv[4];
 	set_command(data, argv);
 	get_path(data, envp);
-	// set_file();
+	set_file(data);
 
 	// test
 	test_data(*data);

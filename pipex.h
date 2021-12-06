@@ -21,4 +21,5 @@ typedef struct  s_pipex
     char    *outfile;
     char    ***command;
     char    **path;
+    char    **file;
 }               t_pipex;
