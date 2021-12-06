@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   set_data.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgo <mgo@student.42seoul.kr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/06 16:52:40 by mgo               #+#    #+#             */
+/*   Updated: 2021/12/06 16:52:41 by mgo              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "pipex.h"
 
@@ -7,13 +18,13 @@
 ** =============================================================================
 */
 
-static int	set_file(t_pipex **data)
+static int	set_to_exec(t_pipex **data)
 {
-	char	**file_buf;
+	char	**exec_buf;
 	int	i;
 	int	j;
 
-	file_buf = (char **)ft_calloc(3, sizeof(char *));
+	exec_buf = (char **)ft_calloc(3, sizeof(char *));
 	// todo : exception
 	i = -1;
 	while ((*data)->command[++i])
@@ -21,14 +32,14 @@ static int	set_file(t_pipex **data)
 		j = -1;
 		while ((*data)->path[++j])
 		{
-			file_buf[i] = ft_strjoin((*data)->path[j], (*data)->command[i][0]);
+			exec_buf[i] = ft_strjoin((*data)->path[j], (*data)->command[i][0]);
 			// todo : exception
-			if (!access(file_buf[i], X_OK))
+			if (!access(exec_buf[i], X_OK))
 				break ;
-			free(file_buf[i]);
+			free(exec_buf[i]);
 		}
 	}
-	(*data)->file = file_buf;
+	(*data)->to_exec = exec_buf;
 	return (0);
 }
 
@@ -94,7 +105,7 @@ int	set_data(t_pipex **data, char **argv, char **envp)
 	(*data)->outfile = argv[4];
 	set_command(data, argv);
 	get_path(data, envp);
-	set_file(data);
+	set_to_exec(data);
 
 	// test
 	test_data(*data);

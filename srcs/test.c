@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   test.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgo <mgo@student.42seoul.kr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/06 16:52:45 by mgo               #+#    #+#             */
+/*   Updated: 2021/12/06 16:52:46 by mgo              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "pipex.h"
 
@@ -50,10 +61,10 @@ int	test_data(t_pipex *data)
 	i = -1;
 	while (data->path[++i])
 		printf("[%s]", data->path[i]);
-	printf("\n<file>\n");
+	printf("\n<to_exec>\n");
 	i = -1;
-	while (data->file[++i])
-		printf("[%s]\n", data->file[i]);
+	while (data->to_exec[++i])
+		printf("[%s]\n", data->to_exec[i]);
 	printf("===== complete test data =====\n");
 	return (0);
 }

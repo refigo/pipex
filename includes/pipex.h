@@ -10,8 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef PIPEX_H
+# define PIPEX_H
+
 #include <unistd.h>
 #include <stdlib.h>
+#include <fcntl.h>
 #include <stdio.h>
 #include "libft.h"
 
@@ -21,12 +25,22 @@ typedef struct  s_pipex
     char    *outfile;
     char    ***command;
     char    **path;
-    char    **file;
+    char    **to_exec;
 }               t_pipex;
 
+/*
+** =============================================================================
+** Macro
+** =============================================================================
+*/
 
+# ifndef OPEN_MAX
+#  define OPEN_MAX  4096
+# endif
 
-
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE   4096
+#endif
 
 /*
 ** =============================================================================
@@ -52,3 +66,5 @@ int	set_data(t_pipex **data, char **argv, char **envp);
 int	test_anything(char **envp);
 int	test_command_array(char ***command);
 int	test_data(t_pipex *data);
+
+#endif

@@ -30,10 +30,18 @@ void	exit_free_data(t_pipex *data)
 ** =============================================================================
 */
 
-int	pipex(int argc, char **argv)
+int	pipex(t_pipex **data, char **envp)
 {
-	printf("argc == %d\n", argc);
-	printf("Inputs are %s %s %s %s\n", argv[1], argv[2], argv[3], argv[4]);
+	int	fd_in;
+	int	fd_out;
+	char	*buf;
+
+	fd_in = open((*data)->infile, O_RDONLY);
+	read(fd_in, buf, BUFFER_SIZE);
+	close(fd_in);
+	fd_out = open((*data)->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	write(fd_out, buf, BUFFER_SIZE);
+	close(fd_out);
 	return (0);
 }
 
@@ -48,7 +56,7 @@ int	main(int argc, char **argv, char **envp)
 		exit(1);
 	}
 	set_data(&data, argv, envp);
-	pipex(argc, argv);
+	pipex(&data, envp);
 
 	// test
 	test_anything(envp);
