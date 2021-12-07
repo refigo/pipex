@@ -18,7 +18,7 @@
 ** =============================================================================
 */
 
-static int	set_to_exec(t_pipex **data)
+static int	set_exec(t_pipex *data)
 {
 	char	**exec_buf;
 	int	i;
@@ -27,19 +27,19 @@ static int	set_to_exec(t_pipex **data)
 	exec_buf = (char **)ft_calloc(3, sizeof(char *));
 	// todo : exception
 	i = -1;
-	while ((*data)->command[++i])
+	while (data->command[++i])
 	{
 		j = -1;
-		while ((*data)->path[++j])
+		while (data->path[++j])
 		{
-			exec_buf[i] = ft_strjoin((*data)->path[j], (*data)->command[i][0]);
+			exec_buf[i] = ft_strjoin(data->path[j], data->command[i][0]);
 			// todo : exception
 			if (!access(exec_buf[i], X_OK))
 				break ;
 			free(exec_buf[i]);
 		}
 	}
-	(*data)->to_exec = exec_buf;
+	data->exec = exec_buf;
 	return (0);
 }
 
@@ -63,7 +63,7 @@ static int	add_slash_to_path(char **path)
 	return (0);
 }
 
-static int	get_path(t_pipex **data, char **envp)
+static int	get_path(t_pipex *data, char **envp)
 {
 	int	i;
 	char	**path_buf;
@@ -75,14 +75,14 @@ static int	get_path(t_pipex **data, char **envp)
 	path_buf = ft_split(envp[i] + 5, ':');
 	// todo : exception
 	if (!path_buf)
-		exit_free_data(*data);
+		exit_free_data(data);
 	i = -1;
 	add_slash_to_path(path_buf);
-	(*data)->path = path_buf;
+	data->path = path_buf;
 	return (1);
 }
 
-static int	set_command(t_pipex **data, char **argv)
+static int	set_command(t_pipex *data, char **argv)
 {
 	char	***command_buf;
 
@@ -92,22 +92,20 @@ static int	set_command(t_pipex **data, char **argv)
 	// todo : exception
 	command_buf[1] = ft_split(argv[3], ' ');
 	// todo : exception
-	(*data)->command = command_buf;
+	data->command = command_buf;
 	return (0);
 }
 
-int	set_data(t_pipex **data, char **argv, char **envp)
+int	set_data(t_pipex *data, char **argv, char **envp)
 {
-	*data = (t_pipex *)ft_calloc(1, sizeof(t_pipex));
-	if (!(*data))
-		exit_free_data(*data);
-	(*data)->infile = argv[1];
-	(*data)->outfile = argv[4];
+	ft_memset(data, 0, sizeof(t_pipex));
+	data->infile = argv[1];
+	data->outfile = argv[4];
 	set_command(data, argv);
 	get_path(data, envp);
-	set_to_exec(data);
+	set_exec(data);
 
 	// test
-	test_data(*data);
+	test_data(data);
 	return (1);
 }

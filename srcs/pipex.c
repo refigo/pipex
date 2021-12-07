@@ -30,7 +30,7 @@ void	exit_free_data(t_pipex *data)
 ** =============================================================================
 */
 
-int	process_parent(t_pipex **data, int pid_child, int *pipe_a, int i)
+int	process_parent(t_pipex *data, int pid_child, int *pipe_a, int i)
 {
 	int	status;
 
@@ -42,14 +42,14 @@ int	process_parent(t_pipex **data, int pid_child, int *pipe_a, int i)
 	return (0);
 }
 
-int	process_child(t_pipex **data, char **envp, int *pipe_a, int i)
+int	process_child(t_pipex *data, char **envp, int *pipe_a, int i)
 {
 	int	fd;
 
 	if (i == 0)
 	{
 		close(pipe_a[0]);
-		fd = open((*data)->infile, O_RDONLY);
+		fd = open(data->infile, O_RDONLY);
 		// todo: exception
 		dup2(fd, STDIN_FILENO);
 		close(fd);
@@ -58,20 +58,20 @@ int	process_child(t_pipex **data, char **envp, int *pipe_a, int i)
 	}
 	else
 	{
-		fd = open((*data)->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		fd = open(data->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		// todo: exception
 		dup2(pipe_a[0], STDIN_FILENO);
 		close(pipe_a[0]);
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
 	}
-	execve((*data)->to_exec[i], (*data)->command[i], envp);
+	execve(data->exec[i], data->command[i], envp);
 	exit(0);
 	// todo: free data
 	return (0);
 }
 
-int	pipex(t_pipex **data, char **envp)
+int	pipex(t_pipex *data, char **envp)
 {
 	int	pipe_a[2];
 	pid_t	pid_child;
@@ -98,7 +98,7 @@ int	pipex(t_pipex **data, char **envp)
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_pipex	*data;
+	t_pipex	data;
 
 	if (argc != 5)
 	{

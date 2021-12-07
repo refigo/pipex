@@ -16,7 +16,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <fcntl.h>
-#include <stdio.h>
+#include <stdio.h> // to remove
 #include "libft.h"
 
 typedef struct  s_pipex
@@ -25,7 +25,7 @@ typedef struct  s_pipex
     char    *outfile;
     char    ***command;
     char    **path;
-    char    **to_exec;
+    char    **exec;
 }               t_pipex;
 
 /*
@@ -56,7 +56,7 @@ void	exit_free_data(t_pipex *data);
 ** =============================================================================
 */
 
-int	set_data(t_pipex **data, char **argv, char **envp);
+int	set_data(t_pipex *data, char **argv, char **envp);
 
 /*
 ** =============================================================================

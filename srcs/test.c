@@ -63,8 +63,8 @@ int	test_data(t_pipex *data)
 		printf("[%s]", data->path[i]);
 	printf("\n<to_exec>\n");
 	i = -1;
-	while (data->to_exec[++i])
-		printf("[%s]\n", data->to_exec[i]);
+	while (data->exec[++i])
+		printf("[%s]\n", data->exec[i]);
 	printf("===== complete test data =====\n");
 	return (0);
 }
