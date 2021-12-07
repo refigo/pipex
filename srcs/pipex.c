@@ -52,8 +52,10 @@ int	process_child(t_pipex *data, char **envp, int *pipe_a, int i)
 		fd = open(data->infile, O_RDONLY);
 		// todo: exception
 		dup2(fd, STDIN_FILENO);
+		// todo: exception
 		close(fd);
 		dup2(pipe_a[1], STDOUT_FILENO);
+		// todo: exception
 		close(pipe_a[1]);
 	}
 	else
@@ -61,8 +63,10 @@ int	process_child(t_pipex *data, char **envp, int *pipe_a, int i)
 		fd = open(data->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		// todo: exception
 		dup2(pipe_a[0], STDIN_FILENO);
+		// todo: exception
 		close(pipe_a[0]);
 		dup2(fd, STDOUT_FILENO);
+		// todo: exception
 		close(fd);
 	}
 	execve(data->exec[i], data->command[i], envp);
@@ -77,9 +81,9 @@ int	pipex(t_pipex *data, char **envp)
 	pid_t	pid_child;
 	int	i;
 
-	i = -1;
 	pipe(pipe_a);
 	// todo: exception
+	i = -1;
 	while (++i < 2)
 	{
 		pid_child = fork();
