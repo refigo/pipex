@@ -34,7 +34,6 @@ static void	free_command(t_pipex *data)
 			free(data->command[i]);
 		}
 		free(data->command);
-		data->command = 0;
 	}
 }
 
@@ -50,7 +49,6 @@ static void	free_path(t_pipex *data)
 			free(data->path[i]);
 		}
 		free(data->path);
-		data->path = 0;
 	}
 }
 
@@ -66,7 +64,6 @@ static void	free_exec(t_pipex *data)
 			free(data->exec[i]);
 		}
 		free(data->exec);
-		data->exec = 0;
 	}
 }
 
@@ -83,10 +80,20 @@ void	free_data(t_pipex *data)
 ** =============================================================================
 */
 
-void	exit_on_error(t_pipex *data)
+void	exit_on_error(t_pipex *data, char *msg)
 {
-	free_data(data);
 	// errno, perror, strerror
+	if (msg)
+	{
+		ft_putendl_fd(msg, 2);
+	}
+	else
+	{
+		ft_putstr_fd(strerror(errno), 2);
+		//perror("The following error occurred");
+	}
+	free_data(data);
+	exit(1);
 }
 
 void	exit_properly(t_pipex *data)
@@ -113,7 +120,7 @@ int	process_parent(t_pipex *data, int pid_child, int *pipe_a, int i)
 	return (0);
 }
 
-int	process_child(t_pipex *data, char **envp, int *pipe_a, int i)
+void	process_child(t_pipex *data, char **envp, int *pipe_a, int i)
 {
 	int	fd;
 
@@ -141,9 +148,7 @@ int	process_child(t_pipex *data, char **envp, int *pipe_a, int i)
 		close(fd);
 	}
 	execve(data->exec[i], data->command[i], envp);
-	exit(0);
-	// todo: free data
-	return (0);
+	exit_properly(data);
 }
 
 int	pipex(t_pipex *data, char **envp)
@@ -175,19 +180,11 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	data;
 
+	ft_memset(&data, 0, sizeof(t_pipex));
 	if (argc != 5)
-	{
-		printf("argc == %d\n", argc);
-		printf("The number of arguments is wrong!\n");
-		exit_on_error(&data);
-	}
+		exit_on_error(&data, "The number of arguments is wrong!\n");
 	set_data(&data, argv, envp);
 	pipex(&data, envp);
-
-	// test
-	//test_anything(envp);
-	// todo : free data or exit_free_data
-	exit_properly(&data);
 	free_data(&data);
 	return (0);
 }
