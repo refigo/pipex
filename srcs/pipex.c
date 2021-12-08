@@ -14,14 +14,85 @@
 
 /*
 ** =============================================================================
-** etc
+** free.c
 ** =============================================================================
 */
 
-void	exit_free_data(t_pipex *data)
+static void	free_command(t_pipex *data)
 {
-	// TODO : free data's pointer properly
-	exit(1);
+	int	i;
+	int	j;
+
+	if (data->command)
+	{
+		i = -1;
+		while (data->command[++i])
+		{
+			j = -1;
+			while (data->command[i][++j])
+				free(data->command[i][j]);
+			free(data->command[i]);
+		}
+		free(data->command);
+		data->command = 0;
+	}
+}
+
+static void	free_path(t_pipex *data)
+{
+	int	i;
+
+	if (data->path)
+	{
+		i = -1;
+		while (data->path[++i])
+		{
+			free(data->path[i]);
+		}
+		free(data->path);
+		data->path = 0;
+	}
+}
+
+static void	free_exec(t_pipex *data)
+{
+	int	i;
+
+	if (data->exec)
+	{
+		i = -1;
+		while (data->exec[++i])
+		{
+			free(data->exec[i]);
+		}
+		free(data->exec);
+		data->exec = 0;
+	}
+}
+
+void	free_data(t_pipex *data)
+{
+	free_command(data);
+	free_path(data);
+	free_exec(data);
+}
+
+/*
+** =============================================================================
+** exit.c
+** =============================================================================
+*/
+
+void	exit_on_error(t_pipex *data)
+{
+	free_data(data);
+	// errno, perror, strerror
+}
+
+void	exit_properly(t_pipex *data)
+{
+	free_data(data);
+	exit(0);
 }
 
 /*
@@ -108,7 +179,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		printf("argc == %d\n", argc);
 		printf("The number of arguments is wrong!\n");
-		exit(1);
+		exit_on_error(&data);
 	}
 	set_data(&data, argv, envp);
 	pipex(&data, envp);
@@ -116,6 +187,8 @@ int	main(int argc, char **argv, char **envp)
 	// test
 	//test_anything(envp);
 	// todo : free data or exit_free_data
+	exit_properly(&data);
+	free_data(&data);
 	return (0);
 }
 

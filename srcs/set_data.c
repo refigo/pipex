@@ -39,6 +39,7 @@ static int	set_exec(t_pipex *data)
 			free(exec_buf[i]);
 		}
 	}
+	// todo : if there isn't X_OK
 	data->exec = exec_buf;
 	return (0);
 }
@@ -74,9 +75,6 @@ static int	get_path(t_pipex *data, char **envp)
 			break ;
 	path_buf = ft_split(envp[i] + 5, ':');
 	// todo : exception
-	if (!path_buf)
-		exit_free_data(data);
-	i = -1;
 	add_slash_to_path(path_buf);
 	data->path = path_buf;
 	return (1);
