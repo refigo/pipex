@@ -44,8 +44,8 @@ static void	set_exec(t_pipex *data)
 static void	add_slash_to_path(t_pipex *data, char **path)
 {
 	char	*buf;
-	int	len_path;
-	int	i;
+	int		len_path;
+	int		i;
 
 	i = -1;
 	while (path[++i])
@@ -89,7 +89,7 @@ static void	set_command(t_pipex *data, char **argv)
 		exit_on_error(data, "malloc failed");
 }
 
-int	set_data(t_pipex *data, char **argv, char **envp)
+void	set_data(t_pipex *data, char **argv, char **envp)
 {
 	ft_memset(data, 0, sizeof(t_pipex));
 	data->infile = argv[1];
@@ -97,8 +97,5 @@ int	set_data(t_pipex *data, char **argv, char **envp)
 	set_command(data, argv);
 	get_path(data, envp);
 	set_exec(data);
-
-	// test
 	test_data(data);
-	return (1);
 }

@@ -20,9 +20,10 @@
 
 int	test_anything(char **envp)
 {
-	char *str_array[3] = {"ls", "-l", NULL};
-	int	status;
+	char	**str_array;
+	int		status;
 
+	str_array = (char **){"ls", "-l", NULL};
 	status = access("/bin/ls", X_OK);
 	printf("access status : %d\n", status);
 	execve("/bin/ls", str_array, envp);
