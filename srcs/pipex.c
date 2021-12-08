@@ -182,7 +182,7 @@ int	main(int argc, char **argv, char **envp)
 
 	ft_memset(&data, 0, sizeof(t_pipex));
 	if (argc != 5)
-		exit_on_error(&data, "The number of arguments is wrong!\n");
+		exit_on_error(&data, "The number of arguments is wrong!");
 	set_data(&data, argv, envp);
 	pipex(&data, envp);
 	free_data(&data);

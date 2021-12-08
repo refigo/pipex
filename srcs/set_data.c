@@ -12,39 +12,36 @@
 
 #include "pipex.h"
 
-/*
-** =============================================================================
-** set_data.c
-** =============================================================================
-*/
-
-static int	set_exec(t_pipex *data)
+static void	set_exec(t_pipex *data)
 {
-	char	**exec_buf;
 	int	i;
 	int	j;
 
-	exec_buf = (char **)ft_calloc(3, sizeof(char *));
-	// todo : exception
+	data->exec = (char **)ft_calloc(3, sizeof(char *));
+	if (!data->exec)
+		exit_on_error(data, "malloc failed");
 	i = -1;
 	while (data->command[++i])
 	{
 		j = -1;
 		while (data->path[++j])
 		{
-			exec_buf[i] = ft_strjoin(data->path[j], data->command[i][0]);
-			// todo : exception
-			if (!access(exec_buf[i], X_OK))
+			data->exec[i] = ft_strjoin(data->path[j], data->command[i][0]);
+			if (!data->exec[i])
+				exit_on_error(data, "malloc failed");
+			if (!access(data->exec[i], X_OK))
 				break ;
-			free(exec_buf[i]);
+			free(data->exec[i]);
+			data->exec[i] = 0;
 		}
+		if (!data->exec[i])
+			data->exec[i] = ft_strdup(data->command[i][0]);
+		if (!data->exec[i])
+			exit_on_error(data, "malloc failed");
 	}
-	// todo : if there isn't X_OK
-	data->exec = exec_buf;
-	return (0);
 }
 
-static int	add_slash_to_path(char **path)
+static void	add_slash_to_path(t_pipex *data, char **path)
 {
 	char	*buf;
 	int	len_path;
@@ -55,48 +52,45 @@ static int	add_slash_to_path(char **path)
 	{
 		len_path = ft_strlen(path[i]);
 		buf = (char *)ft_calloc(1, len_path + 2);
-		buf = ft_memmove(buf, path[i], len_path);
-		// todo : exception
+		if (!buf)
+			exit_on_error(data, "malloc failed");
+		ft_memmove(buf, path[i], len_path);
 		buf[len_path] = '/';
 		free(path[i]);
 		path[i] = buf;
 	}
-	return (0);
 }
 
-static int	get_path(t_pipex *data, char **envp)
+static void	get_path(t_pipex *data, char **envp)
 {
 	int	i;
-	char	**path_buf;
 
 	i = -1;
 	while (envp[++i])
 		if (ft_strnstr(envp[i], "PATH=", 5))
 			break ;
-	path_buf = ft_split(envp[i] + 5, ':');
-	// todo : exception
-	add_slash_to_path(path_buf);
-	data->path = path_buf;
-	return (1);
+	if (envp[i])
+	{
+		data->path = ft_split(envp[i] + 5, ':');
+		if (!data->path)
+			exit_on_error(data, "malloc failed");
+		add_slash_to_path(data, data->path);
+	}
 }
 
-static int	set_command(t_pipex *data, char **argv)
+static void	set_command(t_pipex *data, char **argv)
 {
-	char	***command_buf;
-
-	command_buf = (char ***)ft_calloc(3, sizeof(char **));
-	// todo : exception
-	command_buf[0] = ft_split(argv[2], ' ');
-	// todo : exception
-	command_buf[1] = ft_split(argv[3], ' ');
-	// todo : exception
-	data->command = command_buf;
-	return (0);
+	data->command = (char ***)ft_calloc(3, sizeof(char **));
+	if (!data->command)
+		exit_on_error(data, "malloc failed");
+	data->command[0] = ft_split(argv[2], ' ');
+	data->command[1] = ft_split(argv[3], ' ');
+	if (!data->command[0] || !data->command[1])
+		exit_on_error(data, "malloc failed");
 }
 
 int	set_data(t_pipex *data, char **argv, char **envp)
 {
-	ft_memset(data, 0, sizeof(t_pipex));
 	data->infile = argv[1];
 	data->outfile = argv[4];
 	set_command(data, argv);
