@@ -84,14 +84,7 @@ void	exit_on_error(t_pipex *data, char *msg)
 {
 	// errno, perror, strerror
 	if (msg)
-	{
 		ft_putendl_fd(msg, 2);
-	}
-	else
-	{
-		ft_putstr_fd(strerror(errno), 2);
-		//perror("The following error occurred");
-	}
 	free_data(data);
 	exit(1);
 }
@@ -114,39 +107,67 @@ int	process_parent(t_pipex *data, int pid_child, int *pipe_a, int i)
 
 	if (i == 0)
 		close(pipe_a[1]);
-	else
+	else if (i == 1)
 		close(pipe_a[0]);
 	waitpid(pid_child, &status, 0);
 	return (0);
 }
 
-void	process_child(t_pipex *data, char **envp, int *pipe_a, int i)
+static void	set_last_cmd(t_pipex *data, int *pipe_a)
 {
 	int	fd;
+	int	status;
 
-	if (i == 0)
+	fd = open(data->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1)
 	{
 		close(pipe_a[0]);
-		fd = open(data->infile, O_RDONLY);
-		// todo: exception
-		dup2(fd, STDIN_FILENO);
-		// todo: exception
+		exit_on_error(data, strerror(errno));
+	}
+	status = dup2(pipe_a[0], STDIN_FILENO);
+	close(pipe_a[0]);
+	if (status == -1)
+	{
 		close(fd);
-		dup2(pipe_a[1], STDOUT_FILENO);
-		// todo: exception
+		exit_on_error(data, strerror(errno));
+	}
+	status = dup2(fd, STDOUT_FILENO);
+	close(fd);
+	if (status == -1)
+		exit_on_error(data, strerror(errno));
+}
+
+static void	set_first_cmd(t_pipex *data, int *pipe_a)
+{
+	int	fd;
+	int	status;
+
+	close(pipe_a[0]);
+	fd = open(data->infile, O_RDONLY);
+	if (fd == -1)
+	{
 		close(pipe_a[1]);
+		exit_on_error(data, strerror(errno));
 	}
-	else
+	status = dup2(fd, STDIN_FILENO);
+	close(fd);
+	if (status == -1)
 	{
-		fd = open(data->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		// todo: exception
-		dup2(pipe_a[0], STDIN_FILENO);
-		// todo: exception
-		close(pipe_a[0]);
-		dup2(fd, STDOUT_FILENO);
-		// todo: exception
-		close(fd);
+		close(pipe_a[1]);
+		exit_on_error(data, strerror(errno));
 	}
+	status = dup2(pipe_a[1], STDOUT_FILENO);
+	close(pipe_a[1]);
+	if (status == -1)
+		exit_on_error(data, strerror(errno));
+}
+
+void	process_child(t_pipex *data, char **envp, int *pipe_a, int i)
+{
+	if (i == 0)
+		set_first_cmd(data, pipe_a);
+	else if (i == 1)
+		set_last_cmd(data, pipe_a);
 	execve(data->exec[i], data->command[i], envp);
 	exit_properly(data);
 }
@@ -157,21 +178,18 @@ int	pipex(t_pipex *data, char **envp)
 	pid_t	pid_child;
 	int	i;
 
-	pipe(pipe_a);
-	// todo: exception
+	if (pipe(pipe_a) == -1)
+		exit_on_error(data, "pipe failed");
 	i = -1;
 	while (++i < 2)
 	{
 		pid_child = fork();
-		// todo: exception
+		if (pid_child == -1)
+			exit_on_error(data, strerror(errno));
 		if (!pid_child)
-		{
 			process_child(data, envp, pipe_a, i);
-		}
 		else
-		{
 			process_parent(data, pid_child, pipe_a, i);
-		}
 	}
 	return (0);
 }
@@ -180,9 +198,12 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	data;
 
-	ft_memset(&data, 0, sizeof(t_pipex));
 	if (argc != 5)
-		exit_on_error(&data, "The number of arguments is wrong!");
+	{
+		ft_putendl_fd("The number of arguments is wrong!", 2);
+		ft_putendl_fd("usage: infile \"cmd1\" \"cmd2\" outfile", 2);
+		return (1);
+	}
 	set_data(&data, argv, envp);
 	pipex(&data, envp);
 	free_data(&data);

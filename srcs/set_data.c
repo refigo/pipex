@@ -91,6 +91,7 @@ static void	set_command(t_pipex *data, char **argv)
 
 int	set_data(t_pipex *data, char **argv, char **envp)
 {
+	ft_memset(data, 0, sizeof(t_pipex));
 	data->infile = argv[1];
 	data->outfile = argv[4];
 	set_command(data, argv);
