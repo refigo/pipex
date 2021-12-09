@@ -20,7 +20,7 @@ int	process_parent(t_pipex *data, int pid_child, int *pipe_a, int i)
 		close(pipe_a[1]);
 	else if (i == 1)
 		close(pipe_a[0]);
-	waitpid(pid_child, &status, 0);
+	waitpid(pid_child, &status, WNOHANG);	// WNOHANG
 	return (0);
 }
 
@@ -79,6 +79,13 @@ void	process_child(t_pipex *data, char **envp, int *pipe_a, int i)
 		set_first_cmd(data, pipe_a);
 	else if (i == 1)
 		set_last_cmd(data, pipe_a);
-	execve(data->exec[i], data->command[i], envp);
+	//call_cmd();
+	if (execve(data->exec[i], data->command[i], envp) == -1)
+	{
+		ft_putstr_fd("command not found: ", 2);
+		ft_putendl_fd(data->command[i][0], 2);
+		exit_on_error(data, NULL);
+	}
+	// todo : exception
 	exit_properly(data);
 }
