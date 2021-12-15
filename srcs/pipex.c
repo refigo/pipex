@@ -26,7 +26,7 @@ static void	pipex(t_pipex *data, char **envp)
 		pid_child = fork();
 		if (pid_child == -1)
 			exit_on_error(data, strerror(errno));
-		if (!pid_child)
+		else if (!pid_child)
 			process_child(data, envp, pipe_a, i);
 		else
 			process_parent(data, pid_child, pipe_a, i);

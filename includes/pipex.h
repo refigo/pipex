@@ -20,6 +20,7 @@
 #include <errno.h>
 #include <string.h>
 #include "libft.h"
+//#include <sys/wait.h>
 
 /*
 ** =============================================================================
@@ -43,11 +44,11 @@ typedef struct  s_pipex
 */
 
 # ifndef OPEN_MAX
-#  define OPEN_MAX  4096
+#  define OPEN_MAX  4096 //?
 # endif
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE   4096
+#  define BUFFER_SIZE   4096 //?
 #endif
 
 /*
