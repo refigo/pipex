@@ -91,24 +91,10 @@ static void	set_command(t_pipex *data, char **argv)
 
 void	set_data(t_pipex *data, char **argv, char **envp)
 {
-	//int	i;
-
 	ft_memset(data, 0, sizeof(t_pipex));
 	data->infile = argv[1];
 	data->outfile = argv[4];
 	set_command(data, argv);
 	get_path(data, envp);
 	set_exec(data);
-	// todo : exec exception
-	/*
-	i = -1;
-	while (data->exec[++i])
-		if (access(data->exec[i], X_OK) == -1)
-		{
-			ft_putstr_fd("command not found: ", 2);
-			ft_putendl_fd(data->command[i][0], 2);
-			exit_on_error(data, NULL);
-		}
-	*/
-	//test_data(data);
 }

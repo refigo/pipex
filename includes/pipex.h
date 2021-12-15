@@ -24,18 +24,30 @@
 
 /*
 ** =============================================================================
+** Enum
+** =============================================================================
+*/
+
+enum	e_pipe
+{
+	READ,
+	WRITE
+};
+
+/*
+** =============================================================================
 ** Struct
 ** =============================================================================
 */
 
-typedef struct  s_pipex
+typedef struct	s_pipex
 {
-    char    *infile;
-    char    *outfile;
-    char    ***command;
-    char    **path;
-    char    **exec;
-}               t_pipex;
+    char	*infile;
+    char	*outfile;
+    char	***command;
+    char	**path;
+    char	**exec;
+}				t_pipex;
 
 /*
 ** =============================================================================
@@ -44,12 +56,8 @@ typedef struct  s_pipex
 */
 
 # ifndef OPEN_MAX
-#  define OPEN_MAX  4096 //?
+#  define OPEN_MAX 256
 # endif
-
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE   4096 //?
-#endif
 
 /*
 ** =============================================================================
@@ -68,12 +76,7 @@ void	exit_on_error(t_pipex *data, char *msg);
 void	exit_properly(t_pipex *data);
 
 // process.c
-int	process_parent(t_pipex *data, int pid_child, int *pipe_a, int i);
+int		process_parent(t_pipex *data, int pid_child, int *pipe_a, int i);
 void	process_child(t_pipex *data, char **envp, int *pipe_a, int i);
-
-// test.c
-int	test_anything(char **envp);
-int	test_command_array(char ***command);
-int	test_data(t_pipex *data);
 
 #endif

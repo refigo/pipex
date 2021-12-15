@@ -29,6 +29,7 @@ static void	free_command(t_pipex *data)
 		}
 		free(data->command);
 	}
+	data->command = NULL;
 }
 
 static void	free_path(t_pipex *data)
@@ -42,6 +43,7 @@ static void	free_path(t_pipex *data)
 			free(data->path[i]);
 		free(data->path);
 	}
+	data->path = NULL;
 }
 
 static void	free_exec(t_pipex *data)
@@ -55,6 +57,7 @@ static void	free_exec(t_pipex *data)
 			free(data->exec[i]);
 		free(data->exec);
 	}
+	data->exec = NULL;
 }
 
 void	free_data(t_pipex *data)
