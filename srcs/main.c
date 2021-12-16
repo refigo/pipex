@@ -45,7 +45,7 @@ int	main(int argc, char **argv, char **envp)
 	if (argc != 5)
 	{
 		ft_putendl_fd("The number of arguments is wrong!", 2);
-		ft_putendl_fd("usage: infile \"cmd1\" \"cmd2\" outfile", 2);
+		ft_putendl_fd("usage: ./pipex infile \"cmd1\" \"cmd2\" outfile", 2);
 		return (1);
 	}
 	set_data(&data, argv, envp);

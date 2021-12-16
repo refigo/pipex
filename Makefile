@@ -51,7 +51,7 @@ SRC_LIST	=	main.c \
 				set_data.c \
 				process.c \
 				free_data.c \
-				exit.c
+				exit.c test_data.c #test
 SRC			=	$(addprefix $(D_SRC), $(SRC_LIST))
 SRC_OBJ		=	$(SRC:.c=.o)
 

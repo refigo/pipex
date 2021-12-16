@@ -26,7 +26,7 @@ command
 
 ### awk_2
 ./pipex infile "grep Hello" "awk \"{count++} END {print count}\"" outfile
-"< infile grep Hello | awk \"{count++} END {print count}\" > outfile"
+< infile grep Hello | awk \"{count++} END {print count}\" > outfile
 #### result_2
 awk: non-terminated string {count++}... at source line 1
  context is
