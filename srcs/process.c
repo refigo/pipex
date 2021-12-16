@@ -12,22 +12,6 @@
 
 #include "pipex.h"
 
-int	process_parent(t_pipex *data, int pid_child, int *pipe_a, int i)
-{
-	int	status;
-	int	ret_wait;
-
-	if (i == 0)
-		close(pipe_a[WRITE]);
-	else if (i == 1)
-		close(pipe_a[READ]);
-	ret_wait = waitpid(pid_child, &status, WNOHANG);
-	printf("return of wait : %d\n", ret_wait);
-	// todo: exception?
-	(void)data;
-	return (0);
-}
-
 static void	set_last_cmd(t_pipex *data, int *pipe_a)
 {
 	int	fd;
@@ -37,19 +21,19 @@ static void	set_last_cmd(t_pipex *data, int *pipe_a)
 	if (fd == -1)
 	{
 		close(pipe_a[READ]);
-		exit_on_error(data, strerror(errno));
+		exit_on_error(data, strerror(errno), 0);
 	}
 	status = dup2(pipe_a[READ], STDIN_FILENO);
 	close(pipe_a[READ]);
 	if (status == -1)
 	{
 		close(fd);
-		exit_on_error(data, strerror(errno));
+		exit_on_error(data, strerror(errno), 0);
 	}
 	status = dup2(fd, STDOUT_FILENO);
 	close(fd);
 	if (status == -1)
-		exit_on_error(data, strerror(errno));
+		exit_on_error(data, strerror(errno), 0);
 }
 
 static void	set_first_cmd(t_pipex *data, int *pipe_a)
@@ -62,19 +46,19 @@ static void	set_first_cmd(t_pipex *data, int *pipe_a)
 	if (fd == -1)
 	{
 		close(pipe_a[WRITE]);
-		exit_on_error(data, strerror(errno));
+		exit_on_error(data, strerror(errno), 0);
 	}
 	status = dup2(fd, STDIN_FILENO);
 	close(fd);
 	if (status == -1)
 	{
 		close(pipe_a[WRITE]);
-		exit_on_error(data, strerror(errno));
+		exit_on_error(data, strerror(errno), 0);
 	}
 	status = dup2(pipe_a[WRITE], STDOUT_FILENO);
 	close(pipe_a[WRITE]);
 	if (status == -1)
-		exit_on_error(data, strerror(errno));
+		exit_on_error(data, strerror(errno), 0);
 }
 
 void	process_child(t_pipex *data, char **envp, int *pipe_a, int i)
@@ -87,6 +71,15 @@ void	process_child(t_pipex *data, char **envp, int *pipe_a, int i)
 	{
 		ft_putstr_fd("command not found: ", 2);
 		ft_putendl_fd(data->command[i][0], 2);
-		exit_on_error(data, NULL);
+		exit_on_error(data, NULL, 127);
 	}
+}
+
+void	process_parent(int	*status_child, int pid_child, int *pipe_a, int i)
+{
+	if (i == 0)
+		close(pipe_a[WRITE]);
+	else if (i == 1)
+		close(pipe_a[READ]);
+	waitpid(pid_child, status_child, WNOHANG);
 }
