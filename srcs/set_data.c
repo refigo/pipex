@@ -98,14 +98,18 @@ int	mgo_splitset(t_pipex *data, char **argv, int i)
 
 	data->command[i] = ft_split(argv[2 + i], mgo_strset(argv[2 + i], "\'\""));
 	// todo: exception
+	if (!data->command[i])
+		exit_on_error(data, "malloc failed", 0);
 	j = -1;
 	while (data->command[i][++j])
 	{
 		buf_command = ft_strtrim(data->command[i][j], " ");
+		// todo: exception
+		if (!buf_command)
+			exit_on_error(data, "malloc failed", 0);
 		free(data->command[i][j]);
 		data->command[i][j] = buf_command;
 	}
-	// todo: exception
 	return (0);
 }
 
