@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgo <mgo@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/04 11:49:46 by mgo               #+#    #+#             */
-/*   Updated: 2021/12/04 11:49:50 by mgo              ###   ########.fr       */
+/*   Updated: 2021/12/16 11:09:06 by mgo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,16 +48,3 @@ int	main(int argc, char **argv, char **envp)
 	free_data(&data);
 	return (0);
 }
-
-/*
-	Examples
-
-
-	$> ./pipex infile "ls -l" "wc -l" outfile
-	should be the same as “< infile ls -l | wc -l > outfile”
-
-	$> ./pipex infile "grep a1" "wc -w" outfile
-	should be the same as “< infile grep a1 | wc -w > outfile”
-
-	https://github.com/vfurmane/pipex-tester
-*/

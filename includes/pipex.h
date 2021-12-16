@@ -22,23 +22,15 @@
 #include "libft.h"
 //#include <sys/wait.h>
 
-/*
-** =============================================================================
-** Enum
-** =============================================================================
-*/
+# ifndef OPEN_MAX
+#  define OPEN_MAX 256
+# endif
 
 enum	e_pipe
 {
 	READ,
 	WRITE
 };
-
-/*
-** =============================================================================
-** Struct
-** =============================================================================
-*/
 
 typedef struct	s_pipex
 {
@@ -49,24 +41,12 @@ typedef struct	s_pipex
     char	**exec;
 }				t_pipex;
 
-/*
-** =============================================================================
-** Macro
-** =============================================================================
-*/
-
-# ifndef OPEN_MAX
-#  define OPEN_MAX 256
-# endif
-
-/*
-** =============================================================================
-** Functions
-** =============================================================================
-*/
-
 // set_data.c
 void	set_data(t_pipex *data, char **argv, char **envp);
+
+// process.c
+int		process_parent(t_pipex *data, int pid_child, int *pipe_a, int i);
+void	process_child(t_pipex *data, char **envp, int *pipe_a, int i);
 
 // free_data.c
 void	free_data(t_pipex *data);
@@ -74,9 +54,5 @@ void	free_data(t_pipex *data);
 // exit.c
 void	exit_on_error(t_pipex *data, char *msg);
 void	exit_properly(t_pipex *data);
-
-// process.c
-int		process_parent(t_pipex *data, int pid_child, int *pipe_a, int i);
-void	process_child(t_pipex *data, char **envp, int *pipe_a, int i);
 
 #endif
