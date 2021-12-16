@@ -13,13 +13,13 @@
 #ifndef PIPEX_H
 # define PIPEX_H
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <errno.h>
-#include <string.h>
-#include "libft.h"
+//#include <unistd.h>
+//#include <stdlib.h>
+# include <fcntl.h>
+# include <errno.h>
+# include <string.h>
+# include "libft.h"
+#include <stdio.h>  // to remove
 //#include <sys/wait.h>
 
 # ifndef OPEN_MAX

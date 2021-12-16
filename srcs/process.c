@@ -24,6 +24,7 @@ int	process_parent(t_pipex *data, int pid_child, int *pipe_a, int i)
 	ret_wait = waitpid(pid_child, &status, WNOHANG);
 	printf("return of wait : %d\n", ret_wait);
 	// todo: exception?
+	(void)data;
 	return (0);
 }
 
