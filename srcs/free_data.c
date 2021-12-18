@@ -14,49 +14,22 @@
 
 static void	free_command(t_pipex *data)
 {
-	int	i;
-	int	j;
-
 	if (data->command)
-	{
-		i = -1;
-		while (data->command[++i])
-		{
-			j = -1;
-			while (data->command[i][++j])
-				free(data->command[i][j]);
-			free(data->command[i]);
-		}
-		free(data->command);
-	}
+		free_3pointer(data->command);
 	data->command = NULL;
 }
 
 static void	free_path(t_pipex *data)
 {
-	int	i;
-
 	if (data->path)
-	{
-		i = -1;
-		while (data->path[++i])
-			free(data->path[i]);
-		free(data->path);
-	}
+		free_2pointer(data->path);
 	data->path = NULL;
 }
 
 static void	free_exec(t_pipex *data)
 {
-	int	i;
-
 	if (data->exec)
-	{
-		i = -1;
-		while (data->exec[++i])
-			free(data->exec[i]);
-		free(data->exec);
-	}
+		free_2pointer(data->exec);
 	data->exec = NULL;
 }
 

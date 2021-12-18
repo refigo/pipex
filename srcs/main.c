@@ -20,18 +20,18 @@ static int	pipex(t_pipex *data, char **envp)
 	int		i;
 
 	if (pipe(pipe_a) == -1)
-		exit_on_error(data, "pipe failed", 0);
+		exit_on_error(data, strerror(errno), 1);
 	status_child = 0;
 	i = -1;
 	while (++i < 2)
 	{
 		pid_child = fork();
 		if (pid_child == -1)
-			exit_on_error(data, strerror(errno), 0);
+			exit_on_error(data, strerror(errno), 1);
 		else if (!pid_child)
 			process_child(data, envp, pipe_a, i);
 		else
-			process_parent(&status_child, pid_child, pipe_a, i);
+			process_parent(pid_child, pipe_a, i);
 	}
 	waitpid(pid_child, &status_child, 0);
 	return (WEXITSTATUS(status_child));

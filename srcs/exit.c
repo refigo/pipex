@@ -22,9 +22,3 @@ void	exit_on_error(t_pipex *data, char *msg, int code)
 	else
 		exit(code);
 }
-
-void	exit_properly(t_pipex *data)
-{
-	free_data(data);
-	exit(0);
-}

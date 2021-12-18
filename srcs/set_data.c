@@ -19,7 +19,7 @@ static void	set_exec(t_pipex *data)
 
 	data->exec = (char **)ft_calloc(3, sizeof(char *));
 	if (!data->exec)
-		exit_on_error(data, "malloc failed", 0);
+		exit_on_error(data, strerror(errno), 1);
 	i = -1;
 	while (data->command[++i])
 	{
@@ -28,16 +28,16 @@ static void	set_exec(t_pipex *data)
 		{
 			data->exec[i] = ft_strjoin(data->path[j], data->command[i][0]);
 			if (!data->exec[i])
-				exit_on_error(data, "malloc failed", 0);
-			if (!access(data->exec[i], X_OK))
+				exit_on_error(data, strerror(errno), 1);
+			if (access(data->exec[i], X_OK) == 0)
 				break ;
 			free(data->exec[i]);
-			data->exec[i] = 0;
+			data->exec[i] = NULL;
 		}
 		if (!data->exec[i])
 			data->exec[i] = ft_strdup(data->command[i][0]);
 		if (!data->exec[i])
-			exit_on_error(data, "malloc failed", 0);
+			exit_on_error(data, strerror(errno), 1);
 	}
 }
 
@@ -53,7 +53,7 @@ static void	add_slash_to_path(t_pipex *data, char **path)
 		len_path = ft_strlen(path[i]);
 		buf = (char *)ft_calloc(1, len_path + 2);
 		if (!buf)
-			exit_on_error(data, "malloc failed", 0);
+			exit_on_error(data, strerror(errno), 1);
 		ft_memmove(buf, path[i], len_path);
 		buf[len_path] = '/';
 		free(path[i]);
@@ -73,44 +73,9 @@ static void	get_path(t_pipex *data, char **envp)
 	{
 		data->path = ft_split(envp[i] + 5, ':');
 		if (!data->path)
-			exit_on_error(data, "malloc failed", 0);
+			exit_on_error(data, strerror(errno), 1);
 		add_slash_to_path(data, data->path);
 	}
-}
-
-int	mgo_strset(char *str, char *set)
-{
-	int	i;
-
-	i = -1;
-	while (str[++i])
-	{
-		if (ft_strchr(set, str[i]))
-			return (str[i]);
-	}
-	return (0);
-}
-
-int	mgo_splitset(t_pipex *data, char **argv, int i)
-{
-	char	*buf_command;
-	int	j;
-
-	data->command[i] = ft_split(argv[2 + i], mgo_strset(argv[2 + i], "\'\""));
-	// todo: exception
-	if (!data->command[i])
-		exit_on_error(data, "malloc failed", 0);
-	j = -1;
-	while (data->command[i][++j])
-	{
-		buf_command = ft_strtrim(data->command[i][j], " ");
-		// todo: exception
-		if (!buf_command)
-			exit_on_error(data, "malloc failed", 0);
-		free(data->command[i][j]);
-		data->command[i][j] = buf_command;
-	}
-	return (0);
 }
 
 static void	set_command(t_pipex *data, char **argv)
@@ -121,17 +86,17 @@ static void	set_command(t_pipex *data, char **argv)
 	num_cmd = 2;
 	data->command = (char ***)ft_calloc(num_cmd + 1, sizeof(char **));
 	if (!data->command)
-		exit_on_error(data, "malloc failed", 0);
+		exit_on_error(data, strerror(errno), 1);
 	i = -1;
 	while (++i < num_cmd)
 	{
-		if (mgo_strset(argv[2 + i], "\'\""))
-			mgo_splitset(data, argv, i);
+		if (cmd_strset(argv[2 + i], "\'\""))
+			cmd_splitquote(data, argv, i);
 		else
 			data->command[i] = ft_split(argv[2 + i], ' ');
 		if (!data->command[i])
-			exit_on_error(data, "malloc failed", 0);
-	}	
+			exit_on_error(data, strerror(errno), 1);
+	}
 }
 
 void	set_data(t_pipex *data, char **argv, char **envp)
@@ -142,6 +107,4 @@ void	set_data(t_pipex *data, char **argv, char **envp)
 	set_command(data, argv);
 	get_path(data, envp);
 	set_exec(data);
-	// test
-	test_data(data);
 }
