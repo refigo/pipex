@@ -6,7 +6,7 @@
 /*   By: mgo <mgo@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/18 12:40:15 by mgo               #+#    #+#             */
-/*   Updated: 2021/12/18 12:40:16 by mgo              ###   ########.fr       */
+/*   Updated: 2021/12/18 13:28:58 by mgo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	cmd_splitquote(t_pipex *data, char **argv, int i)
 	}
 }
 
-void free_2pointer(void	**p)
+void	free_2pointer(void	**p)
 {
 	int	i;
 
@@ -54,7 +54,7 @@ void free_2pointer(void	**p)
 	free(p);
 }
 
-void free_3pointer(void	***p)
+void	free_3pointer(void	***p)
 {
 	int	i;
 

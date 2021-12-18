@@ -29,13 +29,13 @@ enum	e_pipe
 	WRITE
 };
 
-typedef struct	s_pipex
+typedef struct s_pipex
 {
-    char	*infile;
-    char	*outfile;
-    char	***command;
-    char	**path;
-    char	**exec;
+	char	*infile;
+	char	*outfile;
+	char	***command;
+	char	**path;
+	char	**exec;
 }				t_pipex;
 
 // set_data.c
@@ -53,11 +53,11 @@ void	exit_on_error(t_pipex *data, char *msg, int code);
 void	exit_properly(t_pipex *data);
 
 // tool_functions.c
-int	    cmd_strset(char *str, char *set);
+int		cmd_strset(char *str, char *set);
 void	cmd_splitquote(t_pipex *data, char **argv, int i);
-void    free_2pointer(void	**p);
-void    free_3pointer(void	***p);
+void	free_2pointer(void	**p);
+void	free_3pointer(void	***p);
 
-int	test_data(t_pipex *data);   // to remove
+int		test_data(t_pipex *data);// to remove
 
 #endif
