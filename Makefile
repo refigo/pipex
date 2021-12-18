@@ -12,7 +12,7 @@
 
 NAME	=	pipex
 CC		=	gcc
-CFLAGS	=	-Wall -Wextra -Werror
+CFLAGS	=	-Wall -Wextra -Werror -fsanitize=address -g
 #CDEBUG	=	-fsanitize=address -g
 RM		=	rm -f
 

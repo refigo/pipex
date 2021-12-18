@@ -12,6 +12,75 @@
 
 #include "pipex.h"
 
+
+int	set_buf_cmd(char ***buf_cmd, char **buf_quote, char ***buf_spl, int len_cmd)
+{
+	char	**buf2_cmd;
+	char	len_bufcmd;
+	int		i;
+
+	len_bufcmd = ft_strlen((char *)*buf_cmd);
+	buf2_cmd = ft_calloc(len_cmd + 1, sizeof(char *));
+	// todo: exception
+	ft_memmove(buf2_cmd, *buf_cmd, len_bufcmd);
+	// todo: exception?
+	if (*buf_spl)
+	{
+		i = -1;
+		while ((*buf_spl)[++i])
+		{
+			buf2_cmd[len_bufcmd + i] = ft_strdup((*buf_spl)[i]);
+			// todo: exception
+		}
+		free_2pointer(*buf_spl);
+		*buf_spl = NULL;
+		free_2pointer(*buf_cmd);
+		*buf_cmd = buf2_cmd;
+		return (1);
+	}
+	buf2_cmd[len_cmd] = *buf_quote;
+	free(*buf_quote);
+	*buf_quote = NULL;
+	free_2pointer(*buf_cmd);
+	*buf_cmd = buf2_cmd;
+	return (1);
+}
+
+static void	splitspace_remain(t_pipex *data, int i)
+{
+	char	**buf_cmd;
+	char	*buf_quote;
+	char	**buf_spl;
+	int		len_cmd;
+	int		j;
+
+	buf_cmd = ft_calloc(1, sizeof(char *));
+	// todo: exception
+	buf_spl = NULL;
+	len_cmd = 0;
+	j = -1;
+	while (data->command[i][++j])
+	{
+		if (cmd_strset(data->command[i][j], "\'\""))
+		{
+			buf_quote = ft_strdup(data->command[i][j]);
+			// todo: exception
+			len_cmd++;
+		}
+		else
+		{
+			buf_spl = ft_split(data->command[i][j], ' ');
+			// todo: exception
+			len_cmd += ft_strlen((char *)buf_spl);
+		}
+		set_buf_cmd(&buf_cmd, &buf_quote, &buf_spl, len_cmd);
+	}
+	free_2pointer(data->command[i]);
+	data->command[i] = buf_cmd;
+}
+
+// split space in pasing quote
+
 int	cmd_strset(char *str, char *set)
 {
 	int	i;
@@ -43,71 +112,6 @@ void	cmd_splitquote(t_pipex *data, char **argv, int i)
 		data->command[i][j] = buf_command;
 	}
 	splitspace_remain(data, i); // add
-}
-
-int	set_buf_cmd(char ***buf_cmd, char **buf_quote, char ***buf_spl, int len_cmd)
-{
-	char	**buf2_cmd;
-	char	len_bufcmd;
-	int		i;
-
-	len_bufcmd = ft_strlen(*buf_cmd);
-	buf2_cmd = ft_calloc(len_cmd + 1, sizeof(char *));
-	// todo: exception
-	ft_memmove(buf2_cmd, *buf_cmd, len_bufcmd);
-	// todo: exception?
-	if (*buf_spl)
-	{
-		i = -1;
-		while ((*buf_spl)[++i])
-		{
-			buf2_cmd[len_bufcmd + i] = ft_strdup((*buf_spl)[i]);
-			// todo: exception
-		}
-		free_2pointer(*buf_spl);
-		*buf_spl = NULL;
-		free_2pointer(*buf_cmd);
-		*buf_cmd = buf2_cmd;
-		return (1);
-	}
-	buf2_cmd[len_cmd] = *buf_quote;
-	free(*buf_quote);
-	*buf_quote = NULL;
-	free_2pointer(*buf_cmd);
-	buf_cmd = buf2_cmd;
-	return (1);
-}
-
-static void	splitspace_remain(t_pipex *data, int i)
-{
-	char	**buf_cmd;
-	char	*buf_quote;
-	char	**buf_spl;
-	int		len_cmd;
-	int		j;
-
-	buf_cmd = NULL;
-	buf_spl = NULL;
-	len_cmd = 0;
-	j = -1;
-	while (data->command[i][++j])
-	{
-		if (cmd_strset(data->command[i][j], "\'\""))
-		{
-			buf_quote = ft_strdup(data->command[i][j]);
-			// todo: exception
-			len_cmd++;
-		}
-		else
-		{
-			buf_spl = ft_split(data->command[i][j], ' ');
-			// todo: exception
-			len_cmd += ft_strlen(buf_spl);
-		}
-		set_buf_cmd(&buf_cmd, &buf_quote, &buf_spl, len_cmd);
-	}
-	free_2pointer(data->command[i]);
-	data->command[i] = buf_cmd;
 }
 
 void	free_2pointer(char	**p)
