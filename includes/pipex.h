@@ -17,7 +17,6 @@
 # include <errno.h>
 # include <string.h>
 # include "libft.h"
-# include <stdio.h> // test
 
 # ifndef OPEN_MAX
 #  define OPEN_MAX 256
@@ -55,9 +54,7 @@ void	exit_properly(t_pipex *data);
 // tool_functions.c
 int		cmd_strset(char *str, char *set);
 void	cmd_splitquote(t_pipex *data, char **argv, int i);
-void	free_2pointer(void	**p);
-void	free_3pointer(void	***p);
-
-int		test_data(t_pipex *data);// to remove
+void	free_2pointer(char	**p);
+void	free_3pointer(char	***p);
 
 #endif

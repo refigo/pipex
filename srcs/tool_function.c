@@ -44,7 +44,7 @@ void	cmd_splitquote(t_pipex *data, char **argv, int i)
 	}
 }
 
-void	free_2pointer(void	**p)
+void	free_2pointer(char	**p)
 {
 	int	i;
 
@@ -54,7 +54,7 @@ void	free_2pointer(void	**p)
 	free(p);
 }
 
-void	free_3pointer(void	***p)
+void	free_3pointer(char	***p)
 {
 	int	i;
 

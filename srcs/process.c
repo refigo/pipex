@@ -87,5 +87,5 @@ void	process_parent(int pid_child, int *pipe_a, int i)
 		close(pipe_a[WRITE]);
 	else if (i == 1)
 		close(pipe_a[READ]);
-	waitpid(pid_child, status_buf, WNOHANG);
+	waitpid(pid_child, &status_buf, WNOHANG);
 }

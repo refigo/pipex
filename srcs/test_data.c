@@ -1,5 +1,8 @@
 #include "pipex.h"
 
+// for test data
+#include <stdio.h>
+
 static int	test_command_array(char ***command)
 {
 	int	i;
