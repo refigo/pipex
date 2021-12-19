@@ -140,7 +140,7 @@ static void	set_command(t_pipex *data, char **argv)
 	while (++i < num_cmd)
 	{
 		if (cmd_strset(argv[2 + i], "\'\""))
-			cmd_splitquote(data, argv, i);
+			data->command[i] = cmd_splitquote(argv[2 + i]);
 		else
 			data->command[i] = ft_split(argv[2 + i], ' ');
 		if (!data->command[i])

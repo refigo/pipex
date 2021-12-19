@@ -52,9 +52,12 @@ void	exit_on_error(t_pipex *data, char *msg, int code);
 void	exit_properly(t_pipex *data);
 
 // tool_functions.c
+int		set_strdup(char **dest, char *src);
 int		cmd_strset(char *str, char *set);
-void	cmd_splitquote(t_pipex *data, char **argv, int i);
-void	free_2pointer(char	**p);
-void	free_3pointer(char	***p);
+int		free_2pointer(char	**p);
+int		free_3pointer(char	***p);
+
+
+char	**cmd_splitquote(char *str);
 
 #endif

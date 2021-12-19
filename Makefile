@@ -49,6 +49,7 @@ LIBFT_OBJ	=	$(LIBFT:.c=.o)
 
 SRC_LIST	=	main.c \
 				set_data.c \
+				parsing_quote.c \
 				process.c \
 				free_data.c \
 				tool_function.c \
