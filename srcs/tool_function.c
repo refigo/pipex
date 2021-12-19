@@ -96,15 +96,26 @@ static void	put_splitremain(char ***splitted, char **buf_remain)
 	int		len_splitted;
 	int		i;
 
+	int		j;
+
 	len_splitted = ft_strlen((char *)(*splitted));
 	buf_splitted = ft_calloc(len_splitted + ft_strlen((char *)buf_remain) + 1, sizeof(char *));
 	// todo: exception
-	ft_memmove(buf_splitted, splitted, len_splitted);
+	ft_memmove(buf_splitted, *splitted, len_splitted);
 	i = -1;
 	while (buf_remain[++i])
 		buf_splitted[len_splitted + i] = buf_remain[i];
-	free_2pointer(buf_remain);
-	free_2pointer(*splitted);
+	free(buf_remain);
+	free(*splitted);
+
+	printf("buf_splitted in put_splitremain: \n");
+	j = -1;
+	while (buf_splitted[++j])
+	{
+		printf("[%s]", buf_splitted[j]);
+	}
+	printf("\n");
+
 	*splitted = buf_splitted;
 }
 
@@ -113,12 +124,24 @@ static void	put_quote_cmd(char ***splitted, char *buf_quote)
 	char	**buf_splitted;
 	int		len_splitted;
 
+	int		j;
+
 	len_splitted = ft_strlen((char *)(*splitted));
 	buf_splitted = ft_calloc(len_splitted + 2, sizeof(char *));
 	// todo: exception
-	ft_memmove(buf_splitted, splitted, len_splitted);
+	ft_memmove(buf_splitted, *splitted, len_splitted);
 	buf_splitted[len_splitted] = buf_quote;
-	free_2pointer(*splitted);
+	free(*splitted);
+
+
+	printf("buf_splitted in put_quote_cmd: \n");
+	j = -1;
+	while (buf_splitted[++j])
+	{
+		printf("[%s]", buf_splitted[j]);
+	}
+	printf("\n");
+
 	*splitted = buf_splitted;
 }
 
@@ -127,29 +150,67 @@ static char	**splitquote_remain(char *src, char quote)
 	char	**splitted;
 	char	**buf_remain;
 	char	*buf_quote;
+	char	*buf_src;
 	int		i;
 
+	int		j;
+
 	splitted = ft_calloc(1, sizeof(char *));
+	// todo: exception
+	buf_src = src;
 	i = -1;
 	while (src[++i])
 	{
 		if (src[i] != quote)
 			continue ;	// is right?
 		src[i] = '\0';
-		buf_remain = ft_split(src, ' ');
+		buf_remain = ft_split(buf_src, ' ');
 		// todo: exception
 		buf_quote = &(src[i + 1]);
-		while (src[++i] != quote) ; // is right?
+		while (src[++i] != quote)
+			; // is right?
 		src[i] = '\0';
 		buf_quote = ft_strdup(buf_quote);
 		// todo: exception
 
+		// debug
+		printf("buf_remain: \n");
+		j = -1;
+		while (buf_remain[++j])
+		{
+			printf("[%s]", buf_remain[j]);
+		}
+		printf("\n");
+
+		printf("buf_quote: [%s]\n", buf_quote);
+		// debug
+
 		put_splitremain(&splitted, buf_remain);
 		put_quote_cmd(&splitted, buf_quote);
-		buf_quote = &src[i + 1];
+		buf_src = &src[i + 1];
 	}
-	buf_remain = ft_split(buf_quote, ' ');
+	buf_remain = ft_split(buf_src, ' ');
+	// todo: exception
+
+
+	printf("buf_remain: \n");
+	j = -1;
+	while (buf_remain[++j])
+	{
+		printf("[%s]", buf_remain[j]);
+	}
+	printf("\n");
+
 	put_splitremain(&splitted, buf_remain);
+
+	printf("splitted: \n");
+	j = -1;
+	while (splitted[++j])
+	{
+		printf("[%s]", splitted[j]);
+	}
+	printf("\n");
+
 	return (splitted);
 }
 // test field

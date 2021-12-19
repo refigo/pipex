@@ -50,3 +50,7 @@ awk: bailing out at source line 1
 (none)
 
 */
+
+### test awk
+
+./pipex infile "awk '{ print $1, $2}' ./file.txt" "ls -l" outfile
