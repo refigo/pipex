@@ -155,11 +155,6 @@ void	set_data(t_pipex *data, char **argv, char **envp)
 	data->outfile = argv[4];
 	set_command(data, argv);
 	get_path(data, envp);
-
-
-	// test
-	test_data(data);
-
 	set_exec(data);
 
 	// test

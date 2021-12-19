@@ -53,4 +53,6 @@ awk: bailing out at source line 1
 
 ### test awk
 
-./pipex infile "awk '{ print $1, $2}' ./file.txt" "ls -l" outfile
+./pipex infile "awk '{ print \$1, \$2}' ./file.txt" "cat -e" outfile
+
+./pipex infile "awk '{max = 0; for (i=3; i<NF; i++) max = ($i > max) ? $i : max ; print max}' ./file.txt" "cat -e" outfile

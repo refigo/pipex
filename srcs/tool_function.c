@@ -15,107 +15,25 @@
 // debug
 #include <stdio.h>
 
-/*
-int	set_buf_cmd(char ***buf_cmd, char **buf_quote, char ***buf_spl, int len_cmd)
-{
-	char	**buf2_cmd;
-	char	len_bufcmd;
-	int		i;
-
-	len_bufcmd = ft_strlen((char *)*buf_cmd);
-	printf("len_bufcmd == %d\n", len_bufcmd);
-
-	buf2_cmd = ft_calloc(len_cmd + 1, sizeof(char *));
-	// todo: exception
-	ft_memmove(buf2_cmd, *buf_cmd, len_bufcmd);
-	// todo: exception?
-	if (*buf_spl)
-	{
-		i = -1;
-		while ((*buf_spl)[++i])
-		{
-			buf2_cmd[len_bufcmd + i] = ft_strdup((*buf_spl)[i]);
-			// todo: exception
-		}
-		free_2pointer(*buf_spl);
-		*buf_spl = NULL;
-		free_2pointer(*buf_cmd);
-		*buf_cmd = buf2_cmd;
-		return (1);
-	}
-	buf2_cmd[len_cmd] = *buf_quote;
-	free(*buf_quote);
-	*buf_quote = NULL;
-	free_2pointer(*buf_cmd);
-	*buf_cmd = buf2_cmd;
-	return (1);
-}
-
-static void	splitspace_remain(t_pipex *data, int i)
-{
-	char	**buf_cmd;
-	char	*buf_quote;
-	char	**buf_spl;
-	int		len_cmd;
-	int		j;
-
-	buf_cmd = ft_calloc(1, sizeof(char *));
-	// todo: exception
-	buf_spl = NULL;
-	len_cmd = 0;
-	j = -1;
-	while (data->command[i][++j])
-	{
-		if (cmd_strset(data->command[i][j], "\'\""))
-		{
-			buf_quote = ft_strdup(data->command[i][j]);
-			// todo: exception
-			len_cmd++;
-		}
-		else
-		{
-			buf_spl = ft_split(data->command[i][j], ' ');
-			// todo: exception
-			len_cmd += ft_strlen((char *)buf_spl);
-		}
-		set_buf_cmd(&buf_cmd, &buf_quote, &buf_spl, len_cmd);
-	}
-	free_2pointer(data->command[i]);
-	data->command[i] = buf_cmd;
-}
-
-// split space in pasing quote
-
-*/
-
-
-// test field
 static void	put_splitremain(char ***splitted, char **buf_remain)
 {
 	char	**buf_splitted;
 	int		len_splitted;
 	int		i;
 
-	int		j;
-
 	len_splitted = ft_strlen((char *)(*splitted));
 	buf_splitted = ft_calloc(len_splitted + ft_strlen((char *)buf_remain) + 1, sizeof(char *));
 	// todo: exception
-	ft_memmove(buf_splitted, *splitted, len_splitted);
+	i = -1;
+	while (++i < len_splitted)
+		buf_splitted[i] = ft_strdup((*splitted)[i]);
+		// todo: exception
 	i = -1;
 	while (buf_remain[++i])
-		buf_splitted[len_splitted + i] = buf_remain[i];
-	free(buf_remain);
-	free(*splitted);
-
-	printf("buf_splitted in put_splitremain: \n");
-	j = -1;
-	while (buf_splitted[++j])
-	{
-		printf("[%s]", buf_splitted[j]);
-	}
-	printf("\n");
-
+		buf_splitted[len_splitted + i] = ft_strdup(buf_remain[i]);
+		// todo: exception
+	free_2pointer(buf_remain);
+	free_2pointer(*splitted);
 	*splitted = buf_splitted;
 }
 
@@ -123,29 +41,27 @@ static void	put_quote_cmd(char ***splitted, char *buf_quote)
 {
 	char	**buf_splitted;
 	int		len_splitted;
+	int		i;
 
-	int		j;
-
-	len_splitted = ft_strlen((char *)(*splitted));
+	//len_splitted = ft_strlen((char *)(*splitted));
+	len_splitted = 0;
+	while ((*splitted)[len_splitted] != NULL)
+		len_splitted++;
 	buf_splitted = ft_calloc(len_splitted + 2, sizeof(char *));
-	// todo: exception
-	ft_memmove(buf_splitted, *splitted, len_splitted);
-	buf_splitted[len_splitted] = buf_quote;
-	free(*splitted);
-
-
-	printf("buf_splitted in put_quote_cmd: \n");
-	j = -1;
-	while (buf_splitted[++j])
+	// todo: exception	
+	i = -1;
+	while (++i < len_splitted)
 	{
-		printf("[%s]", buf_splitted[j]);
+		buf_splitted[i] = ft_strdup((*splitted)[i]);
+		// todo: exception
 	}
-	printf("\n");
-
+	buf_splitted[len_splitted] = ft_strdup(buf_quote);
+	free(buf_quote);
+	free_2pointer(*splitted);
 	*splitted = buf_splitted;
 }
 
-static char	**splitquote_remain(char *src, char quote)
+static char	**splitquote_remain(char *src, char quote_found)
 {
 	char	**splitted;
 	char	**buf_remain;
@@ -153,93 +69,39 @@ static char	**splitquote_remain(char *src, char quote)
 	char	*buf_src;
 	int		i;
 
-	int		j;
-
 	splitted = ft_calloc(1, sizeof(char *));
 	// todo: exception
 	buf_src = src;
 	i = -1;
 	while (src[++i])
 	{
-		if (src[i] != quote)
+		if (src[i] != quote_found)
 			continue ;	// is right?
 		src[i] = '\0';
 		buf_remain = ft_split(buf_src, ' ');
 		// todo: exception
-		buf_quote = &(src[i + 1]);
-		while (src[++i] != quote)
-			; // is right?
+		buf_quote = &(src[++i]);
+		while (src[i] != quote_found)
+			i++; // is right?
 		src[i] = '\0';
 		buf_quote = ft_strdup(buf_quote);
 		// todo: exception
-
-		// debug
-		printf("buf_remain: \n");
-		j = -1;
-		while (buf_remain[++j])
-		{
-			printf("[%s]", buf_remain[j]);
-		}
-		printf("\n");
-
-		printf("buf_quote: [%s]\n", buf_quote);
-		// debug
-
 		put_splitremain(&splitted, buf_remain);
 		put_quote_cmd(&splitted, buf_quote);
 		buf_src = &src[i + 1];
 	}
 	buf_remain = ft_split(buf_src, ' ');
 	// todo: exception
-
-
-	printf("buf_remain: \n");
-	j = -1;
-	while (buf_remain[++j])
-	{
-		printf("[%s]", buf_remain[j]);
-	}
-	printf("\n");
-
 	put_splitremain(&splitted, buf_remain);
-
-	printf("splitted: \n");
-	j = -1;
-	while (splitted[++j])
-	{
-		printf("[%s]", splitted[j]);
-	}
-	printf("\n");
-
 	return (splitted);
 }
-// test field
 
 void	cmd_splitquote(t_pipex *data, char **argv, int i)
 {
-	//char	*buf_command;
 	char	quote_found;
-	//int		j;
 
 	quote_found = cmd_strset(argv[2 + i], "\'\"");
-
-	data->command[i] = splitquote_remain(argv[2 + i], quote_found); // making
-
-	/*
-	data->command[i] = ft_split(argv[2 + i], quote_found);
-	if (!data->command[i])
-		exit_on_error(data, strerror(errno), 1);
-	j = -1;
-	while (data->command[i][++j])
-	{
-		buf_command = ft_strtrim(data->command[i][j], " ");
-		if (!buf_command)
-			exit_on_error(data, strerror(errno), 1);
-		free(data->command[i][j]);
-		data->command[i][j] = buf_command;
-	}
-	*/
-	// splitspace_remain(data, i); // to remove
+	data->command[i] = splitquote_remain(argv[2 + i], quote_found);
 }
 
 int	cmd_strset(char *str, char *set)
