@@ -12,15 +12,26 @@
 
 #include "pipex.h"
 
+int	find_len2pointer(char **p)
+{
+	int	len;
+
+	len = 0;
+	while (*p)
+	{
+		p++;
+		len++;
+	}
+	return (len);
+}
+
 static int	put_quote_cmd(char ***splitted, char *buf_quote)
 {
 	char	**buf_splitted;
 	int		len_splitted;
 	int		i;
 
-	len_splitted = 0;
-	while ((*splitted)[len_splitted] != NULL)
-		len_splitted++;
+	len_splitted = find_len2pointer(*splitted);
 	buf_splitted = ft_calloc(len_splitted + 2, sizeof(char *));
 	if (!buf_splitted)
 		return (0);
@@ -58,9 +69,9 @@ static int	put_splitremain(char ***splitted, char **buf_remain)
 	int		len_splitted;
 	int		i;
 
-	len_splitted = ft_strlen((char *)(*splitted));
+	len_splitted = find_len2pointer(*splitted);
 	buf_splitted = ft_calloc(\
-					len_splitted + ft_strlen((char *)buf_remain) + 1, \
+					len_splitted + find_len2pointer(buf_remain) + 1, \
 					sizeof(char *));
 	if (!buf_splitted)
 		return (0);
@@ -86,10 +97,7 @@ static int	splitspace_remain(char ***splitted, char *src_tmp)
 	if (!buf_remain)
 		return (0);
 	if (!put_splitremain(splitted, buf_remain))
-	{
-		free_2pointer(buf_remain);
-		return (0);
-	}
+		return (free_2pointer(buf_remain));
 	return (1);
 }
 
@@ -108,28 +116,30 @@ static int	parse_quote(char ***splitted, char *src, char quote_found)
 		if (!splitspace_remain(splitted, src_tmp))
 			return (0);
 		src_tmp = &(src[++i]);
-		while (src[i] != quote_found)
+		while (src[i] && src[i] != quote_found)
 			i++;
+		if (src[i] == '\0')
+			return (get_quote_cmd(splitted, src_tmp));
 		src[i] = '\0';
 		if (!get_quote_cmd(splitted, src_tmp))
 			return (0);
 		src_tmp = &src[i + 1];
 	}
-	if (!splitspace_remain(splitted, src_tmp))
+	if (*src_tmp && !splitspace_remain(splitted, src_tmp))
 		return (0);
 	return (1);
 }
 
-char	**cmd_splitquote(char *str)
+char	**cmd_splitquote(char *str_cmd)
 {
 	char	**ret_splitted;
 	char	quote_found;
 
-	quote_found = cmd_strset(str, "\'\"");
+	quote_found = cmd_strset(str_cmd, "\'\"");
 	ret_splitted = ft_calloc(1, sizeof(char *));
 	if (!ret_splitted)
 		return (NULL);
-	if (!parse_quote(&ret_splitted, str, quote_found))
+	if (!parse_quote(&ret_splitted, str_cmd, quote_found))
 	{
 		free_2pointer(ret_splitted);
 		return (NULL);
