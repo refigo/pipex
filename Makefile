@@ -12,7 +12,7 @@
 
 NAME	=	pipex
 CC		=	gcc
-CFLAGS	=	-Wall -Wextra -Werror -fsanitize=address -g
+CFLAGS	=	-Wall -Wextra -Werror
 #CDEBUG	=	-fsanitize=address -g
 RM		=	rm -f
 
@@ -50,6 +50,7 @@ LIBFT_OBJ	=	$(LIBFT:.c=.o)
 SRC_LIST	=	main.c \
 				set_data.c \
 				parsing_quote.c \
+				splitspace_remain.c \
 				process.c \
 				free_data.c \
 				tool_function.c \

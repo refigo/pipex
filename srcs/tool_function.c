@@ -20,7 +20,7 @@ int	set_strdup(char **dest, char *src)
 	return (1);
 }
 
-int	cmd_strset(char *str, char *set)
+int	search_strset(char *str, char *set)
 {
 	int	i;
 
@@ -29,6 +29,19 @@ int	cmd_strset(char *str, char *set)
 		if (ft_strchr(set, str[i]))
 			return (str[i]);
 	return (0);
+}
+
+int	find_len2pointer(char **p)
+{
+	int	len;
+
+	len = 0;
+	while (*p)
+	{
+		p++;
+		len++;
+	}
+	return (len);
 }
 
 int	free_2pointer(char	**p)

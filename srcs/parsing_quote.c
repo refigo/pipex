@@ -12,19 +12,6 @@
 
 #include "pipex.h"
 
-int	find_len2pointer(char **p)
-{
-	int	len;
-
-	len = 0;
-	while (*p)
-	{
-		p++;
-		len++;
-	}
-	return (len);
-}
-
 static int	put_quote_cmd(char ***splitted, char *buf_quote)
 {
 	char	**buf_splitted;
@@ -63,44 +50,6 @@ static int	get_quote_cmd(char ***splitted, char *src_tmp)
 	return (1);
 }
 
-static int	put_splitremain(char ***splitted, char **buf_remain)
-{
-	char	**buf_splitted;
-	int		len_splitted;
-	int		i;
-
-	len_splitted = find_len2pointer(*splitted);
-	buf_splitted = ft_calloc(\
-					len_splitted + find_len2pointer(buf_remain) + 1, \
-					sizeof(char *));
-	if (!buf_splitted)
-		return (0);
-	i = -1;
-	while (++i < len_splitted)
-		if (!set_strdup(&(buf_splitted[i]), (*splitted)[i]))
-			return (free_2pointer(buf_splitted));
-	i = -1;
-	while (buf_remain[++i])
-		if (!set_strdup(&(buf_splitted[len_splitted + i]), buf_remain[i]))
-			return (free_2pointer(buf_splitted));
-	free_2pointer(buf_remain);
-	free_2pointer(*splitted);
-	*splitted = buf_splitted;
-	return (1);
-}
-
-static int	splitspace_remain(char ***splitted, char *src_tmp)
-{
-	char	**buf_remain;
-
-	buf_remain = ft_split(src_tmp, ' ');
-	if (!buf_remain)
-		return (0);
-	if (!put_splitremain(splitted, buf_remain))
-		return (free_2pointer(buf_remain));
-	return (1);
-}
-
 static int	parse_quote(char ***splitted, char *src, char quote_found)
 {
 	char	*src_tmp;
@@ -135,7 +84,7 @@ char	**cmd_splitquote(char *str_cmd)
 	char	**ret_splitted;
 	char	quote_found;
 
-	quote_found = cmd_strset(str_cmd, "\'\"");
+	quote_found = search_strset(str_cmd, "\'\"");
 	ret_splitted = ft_calloc(1, sizeof(char *));
 	if (!ret_splitted)
 		return (NULL);

@@ -18,10 +18,6 @@
 # include <string.h>
 # include "libft.h"
 
-# ifndef OPEN_MAX
-#  define OPEN_MAX 256
-# endif
-
 enum	e_pipe
 {
 	READ,
@@ -40,6 +36,12 @@ typedef struct s_pipex
 // set_data.c
 void	set_data(t_pipex *data, char **argv, char **envp);
 
+// parsing_quote.c
+char	**cmd_splitquote(char *str);
+
+// splitspace_remain.c
+int		splitspace_remain(char ***splitted, char *src_tmp);
+
 // process.c
 void	process_parent(int pid_child, int *pipe_a, int i);
 void	process_child(t_pipex *data, char **envp, int *pipe_a, int i);
@@ -53,11 +55,9 @@ void	exit_properly(t_pipex *data);
 
 // tool_functions.c
 int		set_strdup(char **dest, char *src);
-int		cmd_strset(char *str, char *set);
+int		search_strset(char *str, char *set);
+int		find_len2pointer(char **p);
 int		free_2pointer(char	**p);
 int		free_3pointer(char	***p);
-
-
-char	**cmd_splitquote(char *str);
 
 #endif
