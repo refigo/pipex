@@ -14,12 +14,12 @@ NAME		=	pipex
 CC			=	gcc
 CFLAGS		=	-Wall -Wextra -Werror
 #CDEBUG		=	-fsanitize=address -g
-RM			=	rm -f
+RM			=	rm -rf
 
 INC_LINK	=	-I./includes/
 LIBFT		=	-L./lib/libft -lft
 
-SRC_PATH	=	./srcs/
+SRC_PATH	=	./srcs
 SRC_LIST	=	main.c \
 				set_data.c \
 				parsing_quote.c \
@@ -28,13 +28,17 @@ SRC_LIST	=	main.c \
 				free_data.c \
 				tool_function.c \
 				exit.c
-SRC			=	$(addprefix $(SRC_PATH), $(SRC_LIST))
-OBJ			=	$(SRC:.c=.o)
+SRC			=	$(addprefix $(SRC_PATH)/, $(SRC_LIST))
+
+OBJ_PATH	=	./obj
+OBJ_LIST	=	$(SRC_LIST:.c=.o)
+OBJ			=	$(addprefix $(OBJ_PATH)/, $(OBJ_LIST))
 
 $(NAME)	:	$(OBJ) libft
 	$(CC) $(CFLAGS) $(OBJ) $(INC_LINK) $(LIBFT) -o $(NAME)
 
-%.o		:	%.c
+$(OBJ_PATH)/%.o	:	$(SRC_PATH)/%.c
+	@mkdir $(OBJ_PATH) 2> /dev/null || true
 	$(CC) $(CFLAGS) $(INC_LINK) -c $< -o $@
 
 libft	:
@@ -44,11 +48,11 @@ all		:	$(NAME)
 
 clean	:
 	@make -C ./lib/libft clean
-	@$(RM) $(OBJ)
+	@$(RM) $(OBJ_PATH)
 
 fclean	:	clean
 	@make -C ./lib/libft fclean
-	@$(RM) $(OBJ) $(NAME)
+	@$(RM) $(OBJ_PATH) $(NAME)
 
 re		:	fclean all
 
