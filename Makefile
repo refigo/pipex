@@ -10,11 +10,11 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME	=	pipex
-CC		=	gcc
-CFLAGS	=	-Wall -Wextra -Werror
-#CDEBUG	=	-fsanitize=address -g
-RM		=	rm -f
+NAME		=	pipex
+CC			=	gcc
+CFLAGS		=	-Wall -Wextra -Werror
+#CDEBUG		=	-fsanitize=address -g
+RM			=	rm -f
 
 INC_LINK	=	-I./includes/
 LIBFT		=	-L./lib/libft -lft
@@ -37,7 +37,6 @@ $(NAME)	:	$(OBJ) libft
 %.o		:	%.c
 	$(CC) $(CFLAGS) $(INC_LINK) -c $< -o $@
 
-# libft compile
 libft	:
 	@make -C ./lib/libft all
 
