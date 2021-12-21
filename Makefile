@@ -16,37 +16,10 @@ CFLAGS	=	-Wall -Wextra -Werror
 #CDEBUG	=	-fsanitize=address -g
 RM		=	rm -f
 
-D_INC	=	./includes/
-D_SRC	=	./srcs/
-D_LIBFT	=	./includes/libft_mgo/
+INC_LINK	=	-I./includes/
+LIBFT		=	-L./lib/libft -lft
 
-LIBFT_LIST	=	ft_calloc.c \
-				ft_memccpy.c \
-				ft_memchr.c \
-				ft_memcmp.c \
-				ft_memcpy.c \
-				ft_memmove.c \
-				ft_memset.c \
-				ft_putchar_fd.c \
-				ft_putendl_fd.c \
-				ft_putnbr_fd.c \
-				ft_putstr_fd.c \
-				ft_split.c \
-				ft_strchr.c \
-				ft_strdup.c \
-				ft_strjoin.c \
-				ft_strlcat.c \
-				ft_strlcpy.c \
-				ft_strlen.c \
-				ft_strmapi.c \
-				ft_strncmp.c \
-				ft_strnstr.c \
-				ft_strrchr.c \
-				ft_strtrim.c \
-				ft_substr.c
-LIBFT		=	$(addprefix $(D_LIBFT), $(LIBFT_LIST))
-LIBFT_OBJ	=	$(LIBFT:.c=.o)
-
+SRC_PATH	=	./srcs/
 SRC_LIST	=	main.c \
 				set_data.c \
 				parsing_quote.c \
@@ -55,22 +28,28 @@ SRC_LIST	=	main.c \
 				free_data.c \
 				tool_function.c \
 				exit.c
-SRC			=	$(addprefix $(D_SRC), $(SRC_LIST))
-SRC_OBJ		=	$(SRC:.c=.o)
+SRC			=	$(addprefix $(SRC_PATH), $(SRC_LIST))
+OBJ			=	$(SRC:.c=.o)
 
-$(NAME)	:	$(SRC_OBJ) $(LIBFT_OBJ)
-	$(CC) $(CFLAGS) -I $(D_INC) $(SRC_OBJ) $(LIBFT_OBJ) -o $(NAME)
+$(NAME)	:	$(OBJ) libft
+	$(CC) $(CFLAGS) $(OBJ) $(INC_LINK) $(LIBFT) -o $(NAME)
 
 %.o		:	%.c
-	$(CC) $(CFLAGS) -I $(D_INC) -c $< -o $@
+	$(CC) $(CFLAGS) $(INC_LINK) -c $< -o $@
+
+# libft compile
+libft	:
+	@make -C ./lib/libft all
 
 all		:	$(NAME)
 
 clean	:
-	$(RM) $(SRC_OBJ) $(LIBFT_OBJ)
+	@make -C ./lib/libft clean
+	@$(RM) $(OBJ)
 
 fclean	:	clean
-	$(RM) $(NAME)
+	@make -C ./lib/libft fclean
+	@$(RM) $(OBJ) $(NAME)
 
 re		:	fclean all
 
