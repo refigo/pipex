@@ -70,10 +70,8 @@ void	process_child(t_pipex *data, char **envp, int *pipe_a, int i)
 	if (execve(data->exec[i], data->command[i], envp) == -1)
 	{
 		if (access(data->exec[i], X_OK) == -1)
-		{
-			ft_putstr_fd("mgosh: command not found: ", 2);
-			exit_on_error(data, data->command[i][0], 127);
-		}
+			exit_error_2msg(data, \
+				"mgosh: command not found: ", data->command[i][0], 127);
 		else
 			exit_perror(data, 1);
 	}

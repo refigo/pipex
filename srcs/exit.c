@@ -12,23 +12,27 @@
 
 #include "pipex.h"
 
-void	exit_perror(t_pipex *data, int code)
+void	exit_perror(t_pipex *data, int code_err)
 {
 	perror("mgosh");
-	free_data(data);
-	if (!code)
+	if (data)
+		free_data(data);
+	if (!code_err)
 		exit(1);
 	else
-		exit(code);
+		exit(code_err);
 }
 
-void	exit_on_error(t_pipex *data, char *msg, int code)
+void	exit_error_2msg(t_pipex *data, char *msg1, char *msg2, int code_err)
 {
-	if (msg)
-		ft_putendl_fd(msg, 2);
-	free_data(data);
-	if (!code)
+	if (msg1)
+		ft_putstr_fd(msg1, 2);
+	if (msg2)
+		ft_putendl_fd(msg2, 2);
+	if (data)
+		free_data(data);
+	if (!code_err)
 		exit(1);
 	else
-		exit(code);
+		exit(code_err);
 }

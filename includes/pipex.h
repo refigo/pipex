@@ -51,8 +51,8 @@ void	process_child(t_pipex *data, char **envp, int *pipe_a, int i);
 void	free_data(t_pipex *data);
 
 // exit.c
-void	exit_perror(t_pipex *data, int code);
-void	exit_on_error(t_pipex *data, char *msg, int code);
+void	exit_perror(t_pipex *data, int code_err);
+void	exit_error_2msg(t_pipex *data, char *msg1, char *msg2, int code_err);
 
 // tool_functions.c
 int		set_strdup(char **dest, char *src);

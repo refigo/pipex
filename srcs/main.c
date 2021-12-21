@@ -43,13 +43,9 @@ int	main(int argc, char **argv, char **envp)
 	int		ret;
 
 	if (argc != 5)
-	{
-		ft_putendl_fd("mgosh: \
-ambiguous redirect(the number of arguments is wrong)", 2);
-		ft_putendl_fd("usage: \
-./pipex infile \"cmd1\" \"cmd2\" outfile", 2);
-		return (1);
-	}
+		exit_error_2msg(NULL, \
+		"mgosh: ambiguous redirect(the number of arguments is wrong)\n", \
+		"usage: ./pipex infile \"cmd1\" \"cmd2\" outfile", 1);
 	set_data(&data, argv, envp);
 	ret = pipex(&data, envp);
 	free_data(&data);
