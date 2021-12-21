@@ -13,8 +13,8 @@
 #ifndef PIPEX_H
 # define PIPEX_H
 
-# include <fcntl.h>
 # include <errno.h>
+# include <fcntl.h>
 # include <string.h>
 # include <stdio.h>
 # include "libft.h"
