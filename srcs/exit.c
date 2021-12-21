@@ -12,6 +12,16 @@
 
 #include "pipex.h"
 
+void	exit_perror(t_pipex *data, int code)
+{
+	perror("mgosh");
+	free_data(data);
+	if (!code)
+		exit(1);
+	else
+		exit(code);
+}
+
 void	exit_on_error(t_pipex *data, char *msg, int code)
 {
 	if (msg)

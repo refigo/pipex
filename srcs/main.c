@@ -20,14 +20,14 @@ static int	pipex(t_pipex *data, char **envp)
 	int		i;
 
 	if (pipe(pipe_a) == -1)
-		exit_on_error(data, strerror(errno), 1);
+		exit_perror(data, 1);
 	status_child = 0;
 	i = -1;
 	while (++i < 2)
 	{
 		pid_child = fork();
 		if (pid_child == -1)
-			exit_on_error(data, strerror(errno), 1);
+			exit_perror(data, 1);
 		else if (!pid_child)
 			process_child(data, envp, pipe_a, i);
 		else
@@ -44,8 +44,10 @@ int	main(int argc, char **argv, char **envp)
 
 	if (argc != 5)
 	{
-		ft_putendl_fd("The number of arguments is wrong!", 2);
-		ft_putendl_fd("usage: ./pipex infile \"cmd1\" \"cmd2\" outfile", 2);
+		ft_putendl_fd("mgosh: \
+ambiguous redirect(the number of arguments is wrong)", 2);
+		ft_putendl_fd("usage: \
+./pipex infile \"cmd1\" \"cmd2\" outfile", 2);
 		return (1);
 	}
 	set_data(&data, argv, envp);

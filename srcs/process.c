@@ -21,19 +21,19 @@ static void	set_last_cmd(t_pipex *data, int *pipe_a)
 	if (fd == -1)
 	{
 		close(pipe_a[READ]);
-		exit_on_error(data, strerror(errno), 1);
+		exit_perror(data, 1);
 	}
 	status = dup2(pipe_a[READ], STDIN_FILENO);
 	close(pipe_a[READ]);
 	if (status == -1)
 	{
 		close(fd);
-		exit_on_error(data, strerror(errno), 1);
+		exit_perror(data, 1);
 	}
 	status = dup2(fd, STDOUT_FILENO);
 	close(fd);
 	if (status == -1)
-		exit_on_error(data, strerror(errno), 1);
+		exit_perror(data, 1);
 }
 
 static void	set_first_cmd(t_pipex *data, int *pipe_a)
@@ -46,19 +46,19 @@ static void	set_first_cmd(t_pipex *data, int *pipe_a)
 	if (fd == -1)
 	{
 		close(pipe_a[WRITE]);
-		exit_on_error(data, strerror(errno), 1);
+		exit_perror(data, 1);
 	}
 	status = dup2(fd, STDIN_FILENO);
 	close(fd);
 	if (status == -1)
 	{
 		close(pipe_a[WRITE]);
-		exit_on_error(data, strerror(errno), 1);
+		exit_perror(data, 1);
 	}
 	status = dup2(pipe_a[WRITE], STDOUT_FILENO);
 	close(pipe_a[WRITE]);
 	if (status == -1)
-		exit_on_error(data, strerror(errno), 1);
+		exit_perror(data, 1);
 }
 
 void	process_child(t_pipex *data, char **envp, int *pipe_a, int i)
@@ -71,11 +71,11 @@ void	process_child(t_pipex *data, char **envp, int *pipe_a, int i)
 	{
 		if (access(data->exec[i], X_OK) == -1)
 		{
-			ft_putstr_fd("command not found: ", 2);
+			ft_putstr_fd("mgosh: command not found: ", 2);
 			exit_on_error(data, data->command[i][0], 127);
 		}
 		else
-			exit_on_error(data, strerror(errno), 1);
+			exit_perror(data, 1);
 	}
 }
 
