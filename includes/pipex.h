@@ -15,8 +15,8 @@
 
 # include <errno.h>
 # include <fcntl.h>
-# include <string.h>
 # include <stdio.h>
+# include <sys/wait.h>
 # include "libft.h"
 
 enum	e_pipe
