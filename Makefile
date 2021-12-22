@@ -50,7 +50,7 @@ clean	:
 	@make -C ./lib/libft clean
 	@$(RM) $(OBJ_PATH)
 
-fclean	:	clean
+fclean	:
 	@make -C ./lib/libft fclean
 	@$(RM) $(OBJ_PATH) $(NAME)
 

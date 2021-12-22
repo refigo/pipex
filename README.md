@@ -63,3 +63,24 @@ awk: bailing out at source line 1
 ./pipex infile "awk -v -f 'BEGIN{FS=","}{print $1,"FNR="FNR}' myfile myfile" "cat -e" outfile
 
 ./pipex infile "awk -v   -f  ' BEGIN{FS=\",\"}{print \$1,\"FNR=\"FNR}  '   myfile myfile " "cat -e" outfile
+
+#### awk
+awk '{ print }' infile
+
+awk '{count++} END {print count}'
+
+"awk -v -F '{count++} END {print count}' awkfile"
+
+
+
+#### tester
+Tester:
+https://github.com/vfurmane/pipex-tester
+https://github.com/mariadaan/PIPEXaminator
+
+#### quote cmd test
+./pipex infile "awk '{count++} END {print count}'" "cat -e" outfile
+
+./pipex infile "sed -n -e ' 1p ' infile" "cat -e" outfile
+
+./pipex infile "sed -n -e ' /H/p ' infile" "cat -e" outfile
