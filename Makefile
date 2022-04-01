@@ -6,7 +6,7 @@
 #    By: mgo <mgo@student.42seoul.kr>               +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/06 14:54:02 by mgo               #+#    #+#              #
-#    Updated: 2021/12/18 13:45:27 by mgo              ###   ########.fr        #
+#    Updated: 2022/04/01 16:53:17 by mgo              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,6 +45,8 @@ libft	:
 	@make -C ./lib/libft all
 
 all		:	$(NAME)
+
+bonus	:	$(NAME)
 
 clean	:
 	@make -C ./lib/libft clean
