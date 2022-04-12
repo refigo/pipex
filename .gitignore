@@ -5,3 +5,4 @@ pipex
 ./obj
 *.o
 libft.a
+*.swp

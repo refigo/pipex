@@ -3,13 +3,31 @@ pipex_mgo
 /*
 	Examples
 
-
+	---
+	Mandatory
 	$> ./pipex infile "ls -l" "wc -l" outfile
-	should be the same as “< infile ls -l | wc -l > outfile”
+	should be the same as: 
+	“< infile ls -l | wc -l > outfile”
 
 	$> ./pipex infile "grep a1" "wc -w" outfile
-	should be the same as “< infile grep a1 | wc -w > outfile”
+	should be the same as: 
+	“< infile grep a1 | wc -w > outfile”
 
+
+	---
+	Bonus
+	(Handle multiple pipes.)
+	$> ./pipex file1 cmd1 cmd2 cmd3 ... cmdn file2
+	should behave like: 
+	"< file1 cmd1 | cmd2 | cmd3 ... | cmdn > file2"
+
+	(Support << and >> when the first parameter is "here_doc".
+	$> ./pipex here_doc LIMITER cmd cmd1 file
+	should behave like: 
+	"cmd << LIMITER | cmd1 >> file"
+
+
+	----
 	Tester:
 	https://github.com/vfurmane/pipex-tester
 	https://github.com/mariadaan/PIPEXaminator
