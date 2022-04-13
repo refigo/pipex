@@ -12,12 +12,12 @@
 
 #include "pipex_bonus.h"
 
-static void	set_exec(t_pipex *data, int argc)
+static void	set_exec(t_pipex *data)
 {
 	int	i;
 	int	j;
 
-	data->exec = (char **)ft_calloc(argc - 2, sizeof(char *));
+	data->exec = (char **)ft_calloc(data->num_cmd + 1, sizeof(char *));
 	if (!data->exec)
 		exit_perror(data, 1);
 	i = -1;
@@ -80,15 +80,14 @@ static void	get_path(t_pipex *data, char **envp)
 
 static void	set_command(t_pipex *data, int argc, char **argv)
 {
-	int	num_cmd;
 	int	i;
 
-	num_cmd = argc - 3;	// todo: change for bonus considering here_doc
-	data->command = (char ***)ft_calloc(num_cmd + 1, sizeof(char **));
+	data->num_cmd = argc - 3;	// todo: considering here_doc
+	data->command = (char ***)ft_calloc(data->num_cmd + 1, sizeof(char **));
 	if (!data->command)
 		exit_perror(data, 1);
 	i = -1;
-	while (++i < num_cmd)
+	while (++i < data->num_cmd)
 	{
 		if (search_strset(argv[2 + i], "\'\""))
 			data->command[i] = cmd_splitquote(argv[2 + i]);
@@ -106,5 +105,5 @@ void	set_data(t_pipex *data, int argc, char **argv, char **envp)
 	data->outfile = argv[argc - 1];
 	set_command(data, argc, argv);
 	get_path(data, envp);
-	set_exec(data, argc);
+	set_exec(data);
 }

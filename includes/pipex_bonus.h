@@ -32,6 +32,8 @@ typedef struct s_pipex
 	char	***command;
 	char	**path;
 	char	**exec;
+
+	int		num_cmd;
 }				t_pipex;
 
 // set_data_bonus.c

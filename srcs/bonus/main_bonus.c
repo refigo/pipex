@@ -55,9 +55,9 @@ usage2: ./pipex here_doc LIMITER \"cmd1\" \"cmd2\" outfile", 1);
 
 	test_data(&data);
 
+	ret = 0;
 	(void)pipex;
-
-	ret = 0;//pipex(&data, envp);
+	//ret = pipex(&data, envp);
 	free_data(&data);
 	return (ret);
 }
