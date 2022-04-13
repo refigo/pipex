@@ -46,8 +46,9 @@ char	**cmd_splitquote(char *str);
 int		splitspace_remain(char ***splitted, char *src_tmp);
 
 // process_bonus.c
-void	process_parent(int pid_child, int *pipe_a, int i);
-void	process_child(t_pipex *data, char **envp, int *pipe_a, int i);
+//void	process_parent(int pid_child, int *pipe_a, int i);
+void	process_parent(t_pipex *data, int pid_child, int *pipes, int i);
+void	process_child(t_pipex *data, char **envp, int *pipes, int i);
 
 // free_data_bonus.c
 void	free_data(t_pipex *data);

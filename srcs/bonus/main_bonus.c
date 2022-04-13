@@ -14,29 +14,50 @@
 
 // exit_error_argc
 
+
+int	set_pipe_with_index(int *pipes, int index)
+{
+	if (pipe(&(pipes[index * 2])) == -1)
+		return (-1);
+	return (0);
+}
+
 static int	pipex(t_pipex *data, char **envp)
 {
-	int		pipe_a[2];
-	pid_t	pid_child;
+	int		*pipes;
+	pid_t	*pid_child;
 	int		status_child;
 	int		i;
 	// todo: pipe_b
 
-	if (pipe(pipe_a) == -1)
+	pid_child = ft_calloc(data->num_cmd, sizeof(pid_t));
+	if (!pid_child)
 		exit_perror(data, 1);
+
+	pipes = ft_calloc((data->num_cmd - 1) * 2, sizeof(int));
+	if (!pipes)
+		exit_perror(data, 1);
+
+	
 	status_child = 0;
 	i = -1;
-	while (++i < 2)	// todo: change for bonus
+	while (++i < data->num_cmd)	// todo: change for bonus
 	{
-		pid_child = fork();
-		if (pid_child == -1)
+		if (i < (data->num_cmd - 1))
+			if (set_pipe_with_index(pipes, i) == -1)
+				exit_perror(data, 1);
+
+		pid_child[i] = fork();
+		if (pid_child[i] == -1)
 			exit_perror(data, 1);
-		else if (!pid_child)
-			process_child(data, envp, pipe_a, i);
+		else if (pid_child[i] == 0)
+			process_child(data, envp, pipes, i);
 		else
-			process_parent(pid_child, pipe_a, i);
+			process_parent(data, pid_child[i], pipes, i);
 	}
-	waitpid(pid_child, &status_child, 0);
+	waitpid(pid_child[i], &status_child, 0);
+	free(pid_child);
+	free(pipes);
 	return (WEXITSTATUS(status_child));
 }
 
@@ -55,9 +76,9 @@ usage2: ./pipex here_doc LIMITER \"cmd1\" \"cmd2\" outfile", 1);
 
 	test_data(&data);
 
-	ret = 0;
-	(void)pipex;
-	//ret = pipex(&data, envp);
+	//ret = 0;
+	//(void)pipex;
+	ret = pipex(&data, envp);
 	free_data(&data);
 	return (ret);
 }
