@@ -31,6 +31,8 @@ pipex_mgo
 	Tester:
 	https://github.com/vfurmane/pipex-tester
 	https://github.com/mariadaan/PIPEXaminator
+
+	./pipex /dev/urandom "cat" "head -n 1000" "wc" outfile
 */
 
 /*

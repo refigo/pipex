@@ -14,14 +14,6 @@
 
 // exit_error_argc
 
-
-int	set_pipe_with_index(int *pipes, int index)
-{
-	if (pipe(&(pipes[index * 2])) == -1)
-		return (-1);
-	return (0);
-}
-
 static int	pipex(t_pipex *data, char **envp)
 {
 	int		*pipes;
@@ -55,7 +47,17 @@ static int	pipex(t_pipex *data, char **envp)
 		else
 			process_parent(data, pid_child[i], pipes, i);
 	}
-	waitpid(pid_child[i], &status_child, 0);
+
+	//printf("waitpid last: [%d]\n", waitpid(pid_child[i], &status_child, 0));
+	
+	int	check_wpid;
+	i = -1;
+	while (++i < data->num_cmd)
+	{
+		check_wpid = waitpid(pid_child[i], &status_child, 0);
+		printf("check_wpid: [%d]\n", check_wpid);
+	}
+	
 	free(pid_child);
 	free(pipes);
 	return (WEXITSTATUS(status_child));
@@ -74,7 +76,7 @@ int	main(int argc, char **argv, char **envp)
 usage2: ./pipex here_doc LIMITER \"cmd1\" \"cmd2\" outfile", 1);
 	set_data(&data, argc, argv, envp);
 
-	test_data(&data);
+	//test_data(&data);
 
 	//ret = 0;
 	//(void)pipex;

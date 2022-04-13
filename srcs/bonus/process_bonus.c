@@ -12,33 +12,12 @@
 
 #include "pipex_bonus.h"
 
-
-
-int	get_pipe_index(int *pipes, int index, enum e_pipe ACT)
-{
-	if (ACT == READ)
-		printf("current pipes[%d][READ]: [%d]\n", index, pipes[(index * 2) + ACT]);
-	else
-		printf("current pipes[%d][WRITE]: [%d]\n", index, pipes[(index * 2) + ACT]);
-	return (pipes[(index * 2) + ACT]);
-}
-
-void	close_pipe_index(int *pipes, int index, enum e_pipe ACT)
-{
-	close(pipes[(index * 2) + ACT]);
-	// return ?
-}
-
-
-static void	set_first_cmd(t_pipex *data, int *pipes, int i)
+static void	set_first_cmd(t_pipex *data, int *pipes)
 {
 	int	fd_in;
 	int	status;
 
-	// todo: change i to zero(0) and remove i
 	close_pipe_index(pipes, 0, READ);
-
-	// set input
 	fd_in = open(data->infile, O_RDONLY);
 	if (fd_in == -1)
 	{
@@ -52,10 +31,8 @@ static void	set_first_cmd(t_pipex *data, int *pipes, int i)
 		close_pipe_index(pipes, 0, WRITE);
 		exit_perror(data, 1);
 	}
-
-	// set output
-	status = dup2(get_pipe_index(pipes, i, WRITE), STDOUT_FILENO);
-	close_pipe_index(pipes, i, WRITE);
+	status = dup2(get_pipe_index(pipes, 0, WRITE), STDOUT_FILENO);
+	close_pipe_index(pipes, 0, WRITE);
 	if (status == -1)
 		exit_perror(data, 1);
 }
@@ -64,36 +41,27 @@ static void	set_middle_cmd(t_pipex *data, int *pipes, int i)
 {
 	int	status;
 
-	// set input
 	status = dup2(get_pipe_index(pipes, i - 1, READ), STDIN_FILENO);
 	close_pipe_index(pipes, i - 1, READ);
 	if (status == -1)
 		exit_perror(data, 1);
-
-	// set output
 	status = dup2(get_pipe_index(pipes, i, WRITE), STDOUT_FILENO);
 	close_pipe_index(pipes, i, WRITE);
 	if (status == -1)
 		exit_perror(data, 1);
 }
 
-static void	set_last_cmd(t_pipex *data, int *pipes, int i)
+static void	set_last_cmd(t_pipex *data, int *pipes)
 {
 	int	fd_out;
 	int	status;
+	int	last_pipe_i;
 
-	// use data->num_cmd
-	// i - 1 == data->num_cmd - 2
-	// last_pipe_i = i - 1 or data->num_cmd - 2
-
-	// set input
-	printf("set_last_cmd input: [%d]\n", get_pipe_index(pipes, i - 1, READ));
-	status = dup2(get_pipe_index(pipes, i - 1, READ), STDIN_FILENO);
-	close_pipe_index(pipes, i - 1, READ);
+	last_pipe_i = data->num_cmd - 2;
+	status = dup2(get_pipe_index(pipes, last_pipe_i, READ), STDIN_FILENO);
+	close_pipe_index(pipes, last_pipe_i, READ);
 	if (status == -1)
 		exit_perror(data, 1);
-
-	// set output
 	fd_out = open(data->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd_out == -1)
 		exit_perror(data, 1);
@@ -106,12 +74,11 @@ static void	set_last_cmd(t_pipex *data, int *pipes, int i)
 void	process_child(t_pipex *data, char **envp, int *pipes, int i)
 {
 	if (i == 0)
-		set_first_cmd(data, pipes, i);	// todo: chage for bonus
-	else if (i == data->num_cmd - 1)
-		set_last_cmd(data, pipes, i);	// todo: chage for bonus
+		set_first_cmd(data, pipes);
+	else if (i == (data->num_cmd - 1))
+		set_last_cmd(data, pipes);
 	else
-		set_middle_cmd(data, pipes, i); // do!
-	
+		set_middle_cmd(data, pipes, i);
 	if (execve(data->exec[i], data->command[i], envp) == -1)
 	{
 		if (access(data->exec[i], X_OK) == -1)
@@ -125,18 +92,20 @@ void	process_child(t_pipex *data, char **envp, int *pipes, int i)
 void	process_parent(t_pipex *data, int pid_child, int *pipes, int i)
 {
 	int	status_buf;
+	int	last_cmd_i;
 
-	// close all pipes?
-	// last_cmd_i = data->num_cmd - 1
-	if (i == 0)	// todo: change for bonus
+	int	check_wpid;
+
+	last_cmd_i = data->num_cmd - 1;
+	if (i == 0)
 		close_pipe_index(pipes, 0, WRITE);
-	else if (i == (data->num_cmd - 1))	// todo: change for bonus
+	else if (i == last_cmd_i)
 		close_pipe_index(pipes, i - 1, READ);
 	else
 	{
 		close_pipe_index(pipes, i - 1, READ);
 		close_pipe_index(pipes, i, WRITE);
 	}
-	waitpid(pid_child, &status_buf, WNOHANG);
-	//printf("done index [%d]\n", i);
+	check_wpid = waitpid(pid_child, &status_buf, WNOHANG);
+	printf("check_wpid: [%d]\n", check_wpid);
 }

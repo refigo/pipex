@@ -57,7 +57,12 @@ void	free_data(t_pipex *data);
 void	exit_perror(t_pipex *data, int code_err);
 void	exit_error_2msg(t_pipex *data, char *msg1, char *msg2, int code_err);
 
-// tool_functions_bonus.c
+// pipe_function_bonus.c
+int		set_pipe_with_index(int *pipes, int index);
+int		get_pipe_index(int *pipes, int index, enum e_pipe ACT);
+void	close_pipe_index(int *pipes, int index, enum e_pipe ACT);
+
+// tool_function_bonus.c
 int		set_strdup(char **dest, char *src);
 int		search_strset(char *str, char *set);
 int		find_len2pointer(char **p);

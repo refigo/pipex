@@ -51,6 +51,7 @@ B_SRC_LIST	=	main_bonus.c \
 				parsing_quote_bonus.c \
 				splitspace_remain_bonus.c \
 				process_bonus.c \
+				pipe_function_bonus.c \
 				free_data_bonus.c \
 				tool_function_bonus.c \
 				exit_bonus.c \
