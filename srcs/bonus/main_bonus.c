@@ -10,7 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
+
+// exit_error_argc
 
 static int	pipex(t_pipex *data, char **envp)
 {
@@ -44,10 +46,11 @@ int	main(int argc, char **argv, char **envp)
 	int		ret;
 
 	printf("hello! I'm bonus!\n");
-	if (argc != 5)
+	if (argc < 5)
 		exit_error_2msg(NULL, \
-		"mgosh: ambiguous redirect(the number of arguments is wrong)\n", \
-		"usage: ./pipex infile \"cmd1\" \"cmd2\" outfile", 1);
+		"mgosh: ambiguous redirect(the number of arguments is little)\n", \
+		"usage1: ./pipex infile \"cmd1\" \"cmd2\" ... \"cmdn\" outfile\n\
+usage2: ./pipex here_doc LIMITER \"cmd1\" \"cmd2\" outfile", 1);
 	set_data(&data, argv, envp);
 	ret = pipex(&data, envp);
 	free_data(&data);

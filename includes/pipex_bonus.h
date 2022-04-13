@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#ifndef PIPEX_BONUS_H
+# define PIPEX_BONUS_H
 
 # include <errno.h>
 # include <fcntl.h>
@@ -34,27 +34,27 @@ typedef struct s_pipex
 	char	**exec;
 }				t_pipex;
 
-// set_data.c
+// set_data_bonus.c
 void	set_data(t_pipex *data, char **argv, char **envp);
 
-// parsing_quote.c
+// parsing_quote_bonus.c
 char	**cmd_splitquote(char *str);
 
-// splitspace_remain.c
+// splitspace_remain_bonus.c
 int		splitspace_remain(char ***splitted, char *src_tmp);
 
-// process.c
+// process_bonus.c
 void	process_parent(int pid_child, int *pipe_a, int i);
 void	process_child(t_pipex *data, char **envp, int *pipe_a, int i);
 
-// free_data.c
+// free_data_bonus.c
 void	free_data(t_pipex *data);
 
-// exit.c
+// exit_bonus.c
 void	exit_perror(t_pipex *data, int code_err);
 void	exit_error_2msg(t_pipex *data, char *msg1, char *msg2, int code_err);
 
-// tool_functions.c
+// tool_functions_bonus.c
 int		set_strdup(char **dest, char *src);
 int		search_strset(char *str, char *set);
 int		find_len2pointer(char **p);
