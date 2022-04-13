@@ -6,7 +6,7 @@
 /*   By: mgo <mgo@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 16:52:40 by mgo               #+#    #+#             */
-/*   Updated: 2021/12/18 13:28:47 by mgo              ###   ########.fr       */
+/*   Updated: 2022/04/12 12:31:56 by mgo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static void	set_command(t_pipex *data, char **argv)
 	int	num_cmd;
 	int	i;
 
-	num_cmd = 2;
+	num_cmd = 2;	// todo: change for bonus
 	data->command = (char ***)ft_calloc(num_cmd + 1, sizeof(char **));
 	if (!data->command)
 		exit_perror(data, 1);

@@ -6,7 +6,7 @@
 /*   By: mgo <mgo@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 19:34:42 by mgo               #+#    #+#             */
-/*   Updated: 2021/12/18 13:21:38 by mgo              ###   ########.fr       */
+/*   Updated: 2022/04/12 12:54:58 by mgo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,9 @@ static void	set_first_cmd(t_pipex *data, int *pipe_a)
 void	process_child(t_pipex *data, char **envp, int *pipe_a, int i)
 {
 	if (i == 0)
-		set_first_cmd(data, pipe_a);
+		set_first_cmd(data, pipe_a);	// todo: chage for bonus
 	else if (i == 1)
-		set_last_cmd(data, pipe_a);
+		set_last_cmd(data, pipe_a);	// todo: chage for bonus
 	if (execve(data->exec[i], data->command[i], envp) == -1)
 	{
 		if (access(data->exec[i], X_OK) == -1)
@@ -81,9 +81,9 @@ void	process_parent(int pid_child, int *pipe_a, int i)
 {
 	int	status_buf;
 
-	if (i == 0)
+	if (i == 0)	// todo: change for bonus
 		close(pipe_a[WRITE]);
-	else if (i == 1)
+	else if (i == 1)	// todo: change for bonus
 		close(pipe_a[READ]);
 	waitpid(pid_child, &status_buf, WNOHANG);
 }

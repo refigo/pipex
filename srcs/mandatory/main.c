@@ -6,7 +6,7 @@
 /*   By: mgo <mgo@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/04 11:49:46 by mgo               #+#    #+#             */
-/*   Updated: 2021/12/18 13:21:14 by mgo              ###   ########.fr       */
+/*   Updated: 2022/04/12 18:48:33 by mgo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,13 @@ static int	pipex(t_pipex *data, char **envp)
 	pid_t	pid_child;
 	int		status_child;
 	int		i;
+	// todo: pipe_b
 
 	if (pipe(pipe_a) == -1)
 		exit_perror(data, 1);
 	status_child = 0;
 	i = -1;
-	while (++i < 2)
+	while (++i < 2)	// todo: change for bonus
 	{
 		pid_child = fork();
 		if (pid_child == -1)
@@ -42,6 +43,7 @@ int	main(int argc, char **argv, char **envp)
 	t_pipex	data;
 	int		ret;
 
+	printf("hello! I'm mandatory!\n");
 	if (argc != 5)
 		exit_error_2msg(NULL, \
 		"mgosh: ambiguous redirect(the number of arguments is wrong)\n", \
