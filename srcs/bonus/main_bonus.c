@@ -51,8 +51,13 @@ int	main(int argc, char **argv, char **envp)
 		"mgosh: ambiguous redirect(the number of arguments is little)\n", \
 		"usage1: ./pipex infile \"cmd1\" \"cmd2\" ... \"cmdn\" outfile\n\
 usage2: ./pipex here_doc LIMITER \"cmd1\" \"cmd2\" outfile", 1);
-	set_data(&data, argv, envp);
-	ret = pipex(&data, envp);
+	set_data(&data, argc, argv, envp);
+
+	test_data(&data);
+
+	(void)pipex;
+
+	ret = 0;//pipex(&data, envp);
 	free_data(&data);
 	return (ret);
 }

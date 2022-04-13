@@ -12,12 +12,12 @@
 
 #include "pipex_bonus.h"
 
-static void	set_exec(t_pipex *data)
+static void	set_exec(t_pipex *data, int argc)
 {
 	int	i;
 	int	j;
 
-	data->exec = (char **)ft_calloc(3, sizeof(char *));
+	data->exec = (char **)ft_calloc(argc - 2, sizeof(char *));
 	if (!data->exec)
 		exit_perror(data, 1);
 	i = -1;
@@ -78,12 +78,12 @@ static void	get_path(t_pipex *data, char **envp)
 	}
 }
 
-static void	set_command(t_pipex *data, char **argv)
+static void	set_command(t_pipex *data, int argc, char **argv)
 {
 	int	num_cmd;
 	int	i;
 
-	num_cmd = 2;	// todo: change for bonus
+	num_cmd = argc - 3;	// todo: change for bonus considering here_doc
 	data->command = (char ***)ft_calloc(num_cmd + 1, sizeof(char **));
 	if (!data->command)
 		exit_perror(data, 1);
@@ -99,12 +99,12 @@ static void	set_command(t_pipex *data, char **argv)
 	}
 }
 
-void	set_data(t_pipex *data, char **argv, char **envp)
+void	set_data(t_pipex *data, int argc, char **argv, char **envp)
 {
 	ft_memset(data, 0, sizeof(t_pipex));
-	data->infile = argv[1];
-	data->outfile = argv[4];
-	set_command(data, argv);
+	data->infile = argv[1];	// todo: check here_doc
+	data->outfile = argv[argc - 1];
+	set_command(data, argc, argv);
 	get_path(data, envp);
-	set_exec(data);
+	set_exec(data, argc);
 }

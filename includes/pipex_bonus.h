@@ -35,7 +35,7 @@ typedef struct s_pipex
 }				t_pipex;
 
 // set_data_bonus.c
-void	set_data(t_pipex *data, char **argv, char **envp);
+void	set_data(t_pipex *data, int argc, char **argv, char **envp);
 
 // parsing_quote_bonus.c
 char	**cmd_splitquote(char *str);
@@ -60,5 +60,8 @@ int		search_strset(char *str, char *set);
 int		find_len2pointer(char **p);
 int		free_2pointer(char	**p);
 int		free_3pointer(char	***p);
+
+
+int	test_data(t_pipex *data);
 
 #endif

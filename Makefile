@@ -53,7 +53,8 @@ B_SRC_LIST	=	main_bonus.c \
 				process_bonus.c \
 				free_data_bonus.c \
 				tool_function_bonus.c \
-				exit_bonus.c
+				exit_bonus.c \
+				test_data.c
 B_SRC		=	$(addprefix $(SRC_PATH)$(DIR_BNS), $(B_SRC_LIST))
 
 OBJ_LIST	=	$(SRC_LIST:.c=.o)
@@ -100,5 +101,7 @@ fclean	:
 	@$(RM) $(OBJ_PATH) $(NAME)
 
 re		:	fclean all
+
+bre		:	fclean bonus
 
 .PHONY	:	all clean fclean re
