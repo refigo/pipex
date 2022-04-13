@@ -18,13 +18,12 @@ static int	pipex(t_pipex *data, char **envp)
 	pid_t	pid_child;
 	int		status_child;
 	int		i;
-	// todo: pipe_b
 
 	if (pipe(pipe_a) == -1)
 		exit_perror(data, 1);
 	status_child = 0;
 	i = -1;
-	while (++i < 2)	// todo: change for bonus
+	while (++i < 2)
 	{
 		pid_child = fork();
 		if (pid_child == -1)
@@ -43,7 +42,6 @@ int	main(int argc, char **argv, char **envp)
 	t_pipex	data;
 	int		ret;
 
-	printf("hello! I'm mandatory!\n");
 	if (argc != 5)
 		exit_error_2msg(NULL, \
 		"mgosh: ambiguous redirect(the number of arguments is wrong)\n", \
