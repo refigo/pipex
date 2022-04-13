@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   process.c                                          :+:      :+:    :+:   */
+/*   process_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgo <mgo@student.42seoul.kr>               +#+  +:+       +#+        */
+/*   By: mgo <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/08 19:34:42 by mgo               #+#    #+#             */
-/*   Updated: 2022/04/12 12:54:58 by mgo              ###   ########.fr       */
+/*   Created: 2022/04/13 20:48:29 by mgo               #+#    #+#             */
+/*   Updated: 2022/04/13 20:48:34 by mgo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,5 +107,5 @@ void	process_parent(t_pipex *data, int pid_child, int *pipes, int i)
 		close_pipe_index(pipes, i, WRITE);
 	}
 	check_wpid = waitpid(pid_child, &status_buf, WNOHANG);
-	printf("check_wpid: [%d]\n", check_wpid);
+	//printf("check_wpid: [%d]\n", check_wpid);
 }
