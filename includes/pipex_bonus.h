@@ -43,6 +43,9 @@ typedef struct s_pipex
 	int		is_heredoc;
 	char	*limiter;
 	int		fd_heredoc;
+
+	int		*pipes;
+	pid_t	*pids;
 }				t_pipex;
 
 // set_data_bonus.c
@@ -63,22 +66,23 @@ int		splitspace_remain(char ***splitted, char *src_tmp);
 int		run_pipex(t_pipex *data, char **envp);
 
 // process_bonus.c
-void	process_parent(t_pipex *data, int *pipes, int i);
-void	process_child(t_pipex *data, char **envp, int *pipes, int i);
+void	process_parent(t_pipex *data, int i);
+void	process_child(t_pipex *data, char **envp, int i);
 
 // free_data_bonus.c
 void	free_data(t_pipex *data);
 
-// exit_bonus.c
+// func_exit_bonus.c
 void	exit_perror(t_pipex *data, int code_err);
 void	exit_error_2msg(t_pipex *data, char *msg1, char *msg2, int code_err);
 
-// pipe_function_bonus.c
+// func_pipe_pid_bonus.c
+void	calloc_pipes_and_pids(t_pipex *data);
 int		set_pipe_index(int *pipes, int index);
 int		get_pipe_index(int *pipes, int index, enum e_pipe ACT);
 void	close_pipe_index(int *pipes, int index, enum e_pipe ACT);
 
-// tool_function_bonus.c
+// func_tool_bonus.c
 int		set_strdup(char **dest, char *src);
 int		search_strset(char *str, char *set);
 int		find_len2pointer(char **p);

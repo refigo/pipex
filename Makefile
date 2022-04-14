@@ -53,10 +53,10 @@ B_SRC_LIST	=	main_bonus.c \
 				splitspace_remain_bonus.c \
 				run_pipex_bonus.c \
 				process_bonus.c \
-				pipe_function_bonus.c \
 				free_data_bonus.c \
-				tool_function_bonus.c \
-				exit_bonus.c
+				func_pipe_pid_bonus.c \
+				func_tool_bonus.c \
+				func_exit_bonus.c
 B_SRC		=	$(addprefix $(SRC_PATH)$(DIR_BNS), $(B_SRC_LIST))
 
 OBJ_LIST	=	$(SRC_LIST:.c=.o)

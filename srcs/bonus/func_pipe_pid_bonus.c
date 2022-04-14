@@ -1,16 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipe_function_bonus.c                              :+:      :+:    :+:   */
+/*   func_pipe_pid_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgo <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/13 20:49:21 by mgo               #+#    #+#             */
-/*   Updated: 2022/04/13 20:49:24 by mgo              ###   ########.fr       */
+/*   Created: 2022/04/14 14:11:08 by mgo               #+#    #+#             */
+/*   Updated: 2022/04/14 14:11:13 by mgo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
+
+void	calloc_pipes_and_pids(t_pipex *data)
+{
+	data->pids = ft_calloc(data->num_cmd, sizeof(pid_t));
+	if (!(data->pids))
+		exit_perror(data, 1);
+	data->pipes = ft_calloc((data->num_cmd - 1) * 2, sizeof(int));
+	if (!(data->pipes))
+		exit_perror(data, 1);
+}
 
 int	set_pipe_index(int *pipes, int index)
 {

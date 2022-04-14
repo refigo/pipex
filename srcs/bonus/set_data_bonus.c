@@ -106,6 +106,7 @@ void	set_data(t_pipex *data, int argc, char **argv, char **envp)
 	set_command(data, argc, argv);
 	get_path(data, envp);
 	set_exec(data);
+	calloc_pipes_and_pids(data);
 	if (data->is_heredoc == TRUE)
 		set_heredoc_as_infile_and_input(data, argv);
 	else

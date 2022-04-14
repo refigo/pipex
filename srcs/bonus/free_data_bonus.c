@@ -33,11 +33,20 @@ static void	free_exec(t_pipex *data)
 	data->exec = NULL;
 }
 
+static void	free_pipes_and_pids(t_pipex *data)
+{
+	if (data->pipes)
+		free(data->pipes);
+	if (data->pids)
+		free(data->pids);
+}
+
 void	free_data(t_pipex *data)
 {
 	free_command(data);
 	free_path(data);
 	free_exec(data);
+	free_pipes_and_pids(data);
 	if (!ft_strncmp(data->infile, ".here_doc", ft_strlen(".here_doc") + 1))
 		unlink(data->infile);
 }
