@@ -19,6 +19,12 @@
 # include <sys/wait.h>
 # include "libft.h"
 
+enum	e_bool
+{
+	FALSE,
+	TRUE
+};
+
 enum	e_pipe
 {
 	READ,
@@ -32,10 +38,23 @@ typedef struct s_pipex
 	char	***command;
 	char	**path;
 	char	**exec;
+
+	int		num_cmd;
+	int		is_heredoc;
+	char	*limiter;
+	int		fd_heredoc;
+
+	int		*pipes;
+	pid_t	*pids;
 }				t_pipex;
 
 // set_data.c
-void	set_data(t_pipex *data, char **argv, char **envp);
+void	set_data(t_pipex *data, int argc, char **argv, char **envp);
+
+// heredoc.c
+void	confirm_heredoc_shifting_sequence(t_pipex *data, \
+											int *argc, char ***argv);
+void	set_heredoc_as_infile_and_input(t_pipex *data, char **argv);
 
 // parsing_quote.c
 char	**cmd_splitquote(char *str);
@@ -43,18 +62,27 @@ char	**cmd_splitquote(char *str);
 // splitspace_remain.c
 int		splitspace_remain(char ***splitted, char *src_tmp);
 
+// run_pipex.c
+int		run_pipex(t_pipex *data, char **envp);
+
 // process.c
-void	process_parent(int pid_child, int *pipe_a, int i);
-void	process_child(t_pipex *data, char **envp, int *pipe_a, int i);
+void	process_parent(t_pipex *data, int i);
+void	process_child(t_pipex *data, char **envp, int i);
 
 // free_data.c
 void	free_data(t_pipex *data);
 
-// exit.c
+// func_exit.c
 void	exit_perror(t_pipex *data, int code_err);
 void	exit_error_2msg(t_pipex *data, char *msg1, char *msg2, int code_err);
 
-// tool_functions.c
+// func_pipe_pid.c
+void	calloc_pipes_and_pids(t_pipex *data);
+int		set_pipe_index(int *pipes, int index);
+int		get_pipe_index(int *pipes, int index, enum e_pipe ACT);
+void	close_pipe_index(int *pipes, int index, enum e_pipe ACT);
+
+// func_tool.c
 int		set_strdup(char **dest, char *src);
 int		search_strset(char *str, char *set);
 int		find_len2pointer(char **p);

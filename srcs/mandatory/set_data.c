@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgo <mgo@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/06 16:52:40 by mgo               #+#    #+#             */
-/*   Updated: 2022/04/12 12:31:56 by mgo              ###   ########.fr       */
+/*   Created: 2022/04/14 19:36:33 by mgo               #+#    #+#             */
+/*   Updated: 2022/04/14 19:36:35 by mgo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void	set_exec(t_pipex *data)
 	int	i;
 	int	j;
 
-	data->exec = (char **)ft_calloc(3, sizeof(char *));
+	data->exec = (char **)ft_calloc(data->num_cmd + 1, sizeof(char *));
 	if (!data->exec)
 		exit_perror(data, 1);
 	i = -1;
@@ -78,17 +78,16 @@ static void	get_path(t_pipex *data, char **envp)
 	}
 }
 
-static void	set_command(t_pipex *data, char **argv)
+static void	set_command(t_pipex *data, int argc, char **argv)
 {
-	int	num_cmd;
 	int	i;
 
-	num_cmd = 2;
-	data->command = (char ***)ft_calloc(num_cmd + 1, sizeof(char **));
+	data->num_cmd = argc - 3;
+	data->command = (char ***)ft_calloc(data->num_cmd + 1, sizeof(char **));
 	if (!data->command)
 		exit_perror(data, 1);
 	i = -1;
-	while (++i < num_cmd)
+	while (++i < data->num_cmd)
 	{
 		if (search_strset(argv[2 + i], "\'\""))
 			data->command[i] = cmd_splitquote(argv[2 + i]);
@@ -99,12 +98,18 @@ static void	set_command(t_pipex *data, char **argv)
 	}
 }
 
-void	set_data(t_pipex *data, char **argv, char **envp)
+void	set_data(t_pipex *data, int argc, char **argv, char **envp)
 {
 	ft_memset(data, 0, sizeof(t_pipex));
-	data->infile = argv[1];
-	data->outfile = argv[4];
-	set_command(data, argv);
+	if (!ft_strncmp(argv[1], "here_doc", ft_strlen("here_doc") + 1))
+		confirm_heredoc_shifting_sequence(data, &argc, &argv);
+	set_command(data, argc, argv);
 	get_path(data, envp);
 	set_exec(data);
+	calloc_pipes_and_pids(data);
+	if (data->is_heredoc == TRUE)
+		set_heredoc_as_infile_and_input(data, argv);
+	else
+		data->infile = argv[1];
+	data->outfile = argv[argc - 1];
 }

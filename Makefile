@@ -38,12 +38,15 @@ OBJ_PATH	=	./obj/
 
 SRC_LIST	=	main.c \
 				set_data.c \
+				heredoc.c \
 				parsing_quote.c \
 				splitspace_remain.c \
+				run_pipex.c \
 				process.c \
 				free_data.c \
-				tool_function.c \
-				exit.c
+				func_pipe_pid.c \
+				func_tool.c \
+				func_exit.c
 SRC			=	$(addprefix $(SRC_PATH)$(DIR_MAN), $(SRC_LIST))
 
 B_SRC_LIST	=	main_bonus.c \
@@ -103,7 +106,5 @@ fclean	:
 	@$(RM) $(OBJ_PATH) $(NAME)
 
 re		:	fclean all
-
-bre		:	fclean bonus
 
 .PHONY	:	all clean fclean re

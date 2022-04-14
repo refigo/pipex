@@ -5,68 +5,86 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgo <mgo@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/08 19:34:42 by mgo               #+#    #+#             */
-/*   Updated: 2022/04/12 12:54:58 by mgo              ###   ########.fr       */
+/*   Created: 2022/04/14 19:37:10 by mgo               #+#    #+#             */
+/*   Updated: 2022/04/14 19:37:13 by mgo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-static void	set_last_cmd(t_pipex *data, int *pipe_a)
+static void	set_first_cmd(t_pipex *data)
 {
-	int	fd;
+	int	fd_in;
 	int	status;
 
-	fd = open(data->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd == -1)
+	close_pipe_index(data->pipes, 0, READ);
+	fd_in = open(data->infile, O_RDONLY);
+	if (fd_in == -1)
 	{
-		close(pipe_a[READ]);
+		close_pipe_index(data->pipes, 0, WRITE);
 		exit_perror(data, 1);
 	}
-	status = dup2(pipe_a[READ], STDIN_FILENO);
-	close(pipe_a[READ]);
+	status = dup2(fd_in, STDIN_FILENO);
+	close(fd_in);
 	if (status == -1)
 	{
-		close(fd);
+		close_pipe_index(data->pipes, 0, WRITE);
 		exit_perror(data, 1);
 	}
-	status = dup2(fd, STDOUT_FILENO);
-	close(fd);
+	status = dup2(get_pipe_index(data->pipes, 0, WRITE), STDOUT_FILENO);
+	close_pipe_index(data->pipes, 0, WRITE);
 	if (status == -1)
 		exit_perror(data, 1);
 }
 
-static void	set_first_cmd(t_pipex *data, int *pipe_a)
+static void	set_middle_cmd(t_pipex *data, int i)
 {
-	int	fd;
 	int	status;
 
-	close(pipe_a[READ]);
-	fd = open(data->infile, O_RDONLY);
-	if (fd == -1)
-	{
-		close(pipe_a[WRITE]);
-		exit_perror(data, 1);
-	}
-	status = dup2(fd, STDIN_FILENO);
-	close(fd);
+	status = dup2(get_pipe_index(data->pipes, i - 1, READ), STDIN_FILENO);
+	close_pipe_index(data->pipes, i - 1, READ);
 	if (status == -1)
-	{
-		close(pipe_a[WRITE]);
 		exit_perror(data, 1);
-	}
-	status = dup2(pipe_a[WRITE], STDOUT_FILENO);
-	close(pipe_a[WRITE]);
+	status = dup2(get_pipe_index(data->pipes, i, WRITE), STDOUT_FILENO);
+	close_pipe_index(data->pipes, i, WRITE);
 	if (status == -1)
 		exit_perror(data, 1);
 }
 
-void	process_child(t_pipex *data, char **envp, int *pipe_a, int i)
+static void	set_last_cmd(t_pipex *data)
 {
+	int	fd_out;
+	int	status;
+	int	last_pipe_i;
+
+	last_pipe_i = data->num_cmd - 2;
+	status = dup2(get_pipe_index(data->pipes, last_pipe_i, READ), STDIN_FILENO);
+	close_pipe_index(data->pipes, last_pipe_i, READ);
+	if (status == -1)
+		exit_perror(data, 1);
+	if (data->is_heredoc)
+		fd_out = open(data->outfile, O_WRONLY | O_APPEND | O_CREAT, 0644);
+	else
+		fd_out = open(data->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd_out == -1)
+		exit_perror(data, 1);
+	status = dup2(fd_out, STDOUT_FILENO);
+	close(fd_out);
+	if (status == -1)
+		exit_perror(data, 1);
+}
+
+void	process_child(t_pipex *data, char **envp, int i)
+{
+	int	last_cmd_i;
+
+	last_cmd_i = data->num_cmd - 1;
 	if (i == 0)
-		set_first_cmd(data, pipe_a);
-	else if (i == 1)
-		set_last_cmd(data, pipe_a);
+		set_first_cmd(data);
+	else if (i == last_cmd_i)
+		set_last_cmd(data);
+	else
+		set_middle_cmd(data, i);
 	if (execve(data->exec[i], data->command[i], envp) == -1)
 	{
 		if (access(data->exec[i], X_OK) == -1)
@@ -77,13 +95,18 @@ void	process_child(t_pipex *data, char **envp, int *pipe_a, int i)
 	}
 }
 
-void	process_parent(int pid_child, int *pipe_a, int i)
+void	process_parent(t_pipex *data, int i)
 {
-	int	status_buf;
+	int	last_cmd_i;
 
+	last_cmd_i = data->num_cmd - 1;
 	if (i == 0)
-		close(pipe_a[WRITE]);
-	else if (i == 1)
-		close(pipe_a[READ]);
-	waitpid(pid_child, &status_buf, WNOHANG);
+		close_pipe_index(data->pipes, 0, WRITE);
+	else if (i == last_cmd_i)
+		close_pipe_index(data->pipes, i - 1, READ);
+	else
+	{
+		close_pipe_index(data->pipes, i - 1, READ);
+		close_pipe_index(data->pipes, i, WRITE);
+	}
 }

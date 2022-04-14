@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgo <mgo@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/08 19:30:03 by mgo               #+#    #+#             */
-/*   Updated: 2021/12/18 13:21:09 by mgo              ###   ########.fr       */
+/*   Created: 2022/04/14 19:35:55 by mgo               #+#    #+#             */
+/*   Updated: 2022/04/14 19:35:58 by mgo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,20 @@ static void	free_exec(t_pipex *data)
 	data->exec = NULL;
 }
 
+static void	free_pipes_and_pids(t_pipex *data)
+{
+	if (data->pipes)
+		free(data->pipes);
+	if (data->pids)
+		free(data->pids);
+}
+
 void	free_data(t_pipex *data)
 {
 	free_command(data);
 	free_path(data);
 	free_exec(data);
+	free_pipes_and_pids(data);
+	if (!ft_strncmp(data->infile, ".here_doc", ft_strlen(".here_doc") + 1))
+		unlink(data->infile);
 }
