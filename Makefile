@@ -48,14 +48,15 @@ SRC			=	$(addprefix $(SRC_PATH)$(DIR_MAN), $(SRC_LIST))
 
 B_SRC_LIST	=	main_bonus.c \
 				set_data_bonus.c \
+				heredoc_bonus.c \
 				parsing_quote_bonus.c \
 				splitspace_remain_bonus.c \
+				run_pipex_bonus.c \
 				process_bonus.c \
 				pipe_function_bonus.c \
 				free_data_bonus.c \
 				tool_function_bonus.c \
-				exit_bonus.c \
-				test_data.c
+				exit_bonus.c
 B_SRC		=	$(addprefix $(SRC_PATH)$(DIR_BNS), $(B_SRC_LIST))
 
 OBJ_LIST	=	$(SRC_LIST:.c=.o)

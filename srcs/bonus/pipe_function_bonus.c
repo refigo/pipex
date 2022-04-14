@@ -12,7 +12,7 @@
 
 #include "pipex_bonus.h"
 
-int	set_pipe_with_index(int *pipes, int index)
+int	set_pipe_index(int *pipes, int index)
 {
 	if (pipe(&(pipes[index * 2])) == -1)
 		return (-1);

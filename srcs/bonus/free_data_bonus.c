@@ -38,7 +38,6 @@ void	free_data(t_pipex *data)
 	free_command(data);
 	free_path(data);
 	free_exec(data);
-	// todo: unlink heredoc
-	if (data->is_heredoc)
+	if (!ft_strncmp(data->infile, ".here_doc", ft_strlen(".here_doc") + 1))
 		unlink(data->infile);
 }

@@ -82,7 +82,7 @@ static void	set_command(t_pipex *data, int argc, char **argv)
 {
 	int	i;
 
-	data->num_cmd = argc - 3;	// todo: considering here_doc
+	data->num_cmd = argc - 3;
 	data->command = (char ***)ft_calloc(data->num_cmd + 1, sizeof(char **));
 	if (!data->command)
 		exit_perror(data, 1);
@@ -98,123 +98,16 @@ static void	set_command(t_pipex *data, int argc, char **argv)
 	}
 }
 
-
-/*
-int	set_heredoc_shifting_sequence(t_pipex *data, int *argc, char ***argv)
-{
-	int	fd_heredoc;
-
-	data->infile = (*argv)[1];
-	return (1);
-
-	// exception for arg num with here_doc
-	// ex. arg num is only 4 with here_cod
-	// ./pipex here_doc LIMITER cmd0 outfile
-	if ((*argc) < 6)
-		exit_error_2msg(NULL, "argc is few", "Usage as here_doc", 1); // todo: set error msg
-	data->is_heredoc = TRUE;
-	data->limiter = (*argv)[2];
-
-	// open(.here_doc)
-	fd_heredoc = open(".here_doc", O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	if (fd_heredoc == -1)
-		exit_perror(data, 1);
-
-	// write
-	//write_input_to_heredoc(data, fd_heredoc);
-
-	// set infile
-	data->infile = ".here_doc";
-	(*argc)--;
-	(*argv)++;
-	return (TRUE);
-}
-*/
-
-// heredoc_bonus.c
-
-void	check_is_heredoc_shifting_sequence(t_pipex *data, int *argc, char ***argv)
-{
-	if ((*argc) < 6)
-		exit_error_2msg(NULL, "argc is few", "Usage as here_doc", 1); // todo: set error msg
-	data->is_heredoc = TRUE;
-	(*argc)--;
-	(*argv)++;
-}
-
-
-int	write_input_to_heredoc(t_pipex *data, int fd_heredoc)
-{
-	char	*line;
-	int		gnl;
-	int		is_limiter;
-	int		i;
-
-	//line = NULL;	// should?
-	is_limiter = FALSE;
-	while (is_limiter == FALSE)
-	{
-		i = -1;
-		while (++i < (data->num_cmd - 1))
-			ft_putstr_fd("pipe ", STDOUT_FILENO);
-		ft_putstr_fd("heredoc> ", STDOUT_FILENO);
-		gnl = get_next_line(STDIN_FILENO, &line); // error handling
-		printf("gnl: [%d]\n", gnl);
-		if (gnl == -1)
-			exit_perror(data, 1);	// with unlink
-		if (!ft_strncmp(line, data->limiter, ft_strlen(data->limiter) + 1))
-			is_limiter = TRUE;
-		if (is_limiter == FALSE)
-			ft_putendl_fd(line, fd_heredoc);
-		free(line);
-		//line = NULL;	// should?
-	}
-	return (1);
-}
-
-
-void	set_heredoc_as_infile(t_pipex *data, char **argv)
-{
-	int	fd_heredoc;
-
-	data->limiter = argv[1];
-
-	// open(.here_doc)
-	fd_heredoc = open(".here_doc", O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	if (fd_heredoc == -1)
-		exit_perror(data, 1);
-
-	// write
-	write_input_to_heredoc(data, fd_heredoc);
-
-	data->infile = ".here_doc";
-}
-
-
 void	set_data(t_pipex *data, int argc, char **argv, char **envp)
 {
-	int	check_cmp;
-
 	ft_memset(data, 0, sizeof(t_pipex));
-
-	check_cmp = 0;
-	check_cmp = ft_strncmp(argv[1], "here_doc", ft_strlen("here_doc") + 1);
-	printf("check_cmp: [%d]\n", check_cmp);
-	if (check_cmp == 0)
-	{
-		check_is_heredoc_shifting_sequence(data, &argc, &argv);
-		//set_heredoc_shifting_sequence(data, &argc, &argv);
-	}
-	else
-		data->infile = argv[1];	// todo: check here_doc
-	data->outfile = argv[argc - 1];
-
+	if (!ft_strncmp(argv[1], "here_doc", ft_strlen("here_doc") + 1))
+		confirm_heredoc_shifting_sequence(data, &argc, &argv);
 	set_command(data, argc, argv);
 	get_path(data, envp);
 	set_exec(data);
-
 	if (data->is_heredoc == TRUE)
-		set_heredoc_as_infile(data, argv);
+		set_heredoc_as_infile_and_input(data, argv);
 	else
 		data->infile = argv[1];
 	data->outfile = argv[argc - 1];
