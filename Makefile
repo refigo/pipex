@@ -98,12 +98,16 @@ bonus	:	$(B_OBJ) libft
 	@echo $(GREEN) "$(NAME) is created for bonus!\n" $(ENDCOLOR)
 
 clean	:
+	@echo $(YELLOW) "Cleaning object files..." $(ENDCOLOR)
 	@make -C ./lib/libft clean
 	@$(RM) $(OBJ_PATH)
+	@echo $(RED) "Object files are cleaned!\n" $(ENDCOLOR)
 
-fclean	:
+fclean	: clean
+	@echo $(YELLOW) "Removing $(NAME)..." $(ENDCOLOR)
 	@make -C ./lib/libft fclean
 	@$(RM) $(OBJ_PATH) $(NAME)
+	@echo $(RED) "$(NAME) is removed!\n" $(ENDCOLOR)
 
 re		:	fclean all
 
