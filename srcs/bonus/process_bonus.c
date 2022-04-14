@@ -62,7 +62,10 @@ static void	set_last_cmd(t_pipex *data)
 	close_pipe_index(data->pipes, last_pipe_i, READ);
 	if (status == -1)
 		exit_perror(data, 1);
-	fd_out = open(data->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (data->is_heredoc)
+		fd_out = open(data->outfile, O_WRONLY | O_APPEND | O_CREAT, 0644);
+	else
+		fd_out = open(data->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd_out == -1)
 		exit_perror(data, 1);
 	status = dup2(fd_out, STDOUT_FILENO);
