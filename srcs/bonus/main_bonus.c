@@ -81,6 +81,9 @@ usage2: ./pipex here_doc LIMITER \"cmd1\" \"cmd2\" outfile", 1);
 	//ret = 0;
 	//(void)pipex;
 	ret = pipex(&data, envp);
-	free_data(&data);
+	//printf("ret: [%d]\n", ret);
+
+	free_data(&data);	// todo: unlink heredoc considering error_handling
+	//system("leaks pipex");
 	return (ret);
 }

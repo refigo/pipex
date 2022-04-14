@@ -6,7 +6,7 @@
 /*   By: mgo <mgo@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 11:27:33 by mgo               #+#    #+#             */
-/*   Updated: 2021/05/17 16:15:13 by mgo              ###   ########.fr       */
+/*   Updated: 2022/02/15 14:46:07 by mgo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include <stdlib.h>
 # include <unistd.h>
+
+# include "get_next_line.h"
 
 typedef struct s_list
 {
@@ -67,5 +69,10 @@ void			ft_lstclear(t_list **lst, void (*del)(void *));
 void			ft_lstiter(t_list *lst, void (*f)(void *));
 t_list			*ft_lstmap(t_list *lst, void *(*f)(void *), \
 							void (*del)(void *));
+
+// mgo functions
+int				mgo_free_2ptr(char	**p);
+int				mgo_free_3ptr(char	***p);
+int				mgo_strcmp(const char *s1, const char *s2);
 
 #endif

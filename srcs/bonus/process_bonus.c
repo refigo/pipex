@@ -91,10 +91,10 @@ void	process_child(t_pipex *data, char **envp, int *pipes, int i)
 
 void	process_parent(t_pipex *data, int pid_child, int *pipes, int i)
 {
-	int	status_buf;
+	//int	status_buf;
 	int	last_cmd_i;
 
-	int	check_wpid;
+	//int	check_wpid;
 
 	last_cmd_i = data->num_cmd - 1;
 	if (i == 0)
@@ -106,6 +106,8 @@ void	process_parent(t_pipex *data, int pid_child, int *pipes, int i)
 		close_pipe_index(pipes, i - 1, READ);
 		close_pipe_index(pipes, i, WRITE);
 	}
-	check_wpid = waitpid(pid_child, &status_buf, WNOHANG);
+
+	(void)pid_child; // to remove
+	//check_wpid = waitpid(pid_child, &status_buf, WNOHANG);
 	//printf("check_wpid: [%d]\n", check_wpid);
 }

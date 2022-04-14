@@ -19,6 +19,12 @@
 # include <sys/wait.h>
 # include "libft.h"
 
+enum	e_bool
+{
+	FALSE,
+	TRUE
+};
+
 enum	e_pipe
 {
 	READ,
@@ -34,6 +40,9 @@ typedef struct s_pipex
 	char	**exec;
 
 	int		num_cmd;
+	int		is_heredoc;
+	char	*limiter;
+	int		fd_heredoc;
 }				t_pipex;
 
 // set_data_bonus.c
