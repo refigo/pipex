@@ -24,7 +24,7 @@ static void	set_exec(t_pipex *data)
 	while (data->command[++i])
 	{
 		j = -1;
-		while (data->path[++j])
+		while (data->path && data->path[++j])
 		{
 			data->exec[i] = ft_strjoin(data->path[j], data->command[i][0]);
 			if (!data->exec[i])
