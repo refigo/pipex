@@ -64,4 +64,5 @@ void	set_heredoc_as_infile_and_input(t_pipex *data, char **argv)
 		exit_perror(data, 1);
 	data->infile = ".here_doc";
 	write_input_to_heredoc(data, fd_heredoc);
+	close(fd_heredoc);
 }
